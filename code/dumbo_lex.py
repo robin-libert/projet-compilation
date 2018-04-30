@@ -13,11 +13,25 @@ tokens = (
     'BLOC_BEGIN',
     'BLOC_END',
     'FOR',
+    'ENDFOR',
     'IN',
     'DO',
+    'IF',
+    'ELSE',
+    'ENDIF',
+    'PRINT',
     'INTEGER',
     'ADD_OP',
     'MUL_OP',
+    'PAR_FERM',
+    'PAR_OUVR',
+    'DOT_COMMA',
+    'COMMA',
+    'DOT',
+    'EQUAL',
+    'APO',
+    'STRING',
+    'VAR'
     )
 
 
@@ -27,22 +41,67 @@ def t_BLOC_BEGIN(t):
     t.lexer.begin('inCode')
     return t
 
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+#IN_STRING STATE
+
+def t_inString_APO(t):
+    r'\''
+    t.lexer.begin('inCode')
+    return t
+
+def t_inString_STRING(t):
+    r'[\w|;|&|<|>|\"|_|-|\.|\\|\/|\n|\p|:|\,| ]+'
+    return t
+
+def t_inString_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
 #IN_CODE STATE
+
+def t_inCode_APO(t):
+    r'\''
+    t.lexer.begin('inString')
+    return t
+
 def t_inCode_BLOC_END(t):
     r'}}'
     t.lexer.begin('INITIAL')
     return t
 
 def t_inCode_FOR(t):
-    r'for'
+    r' for '
     return t
 
 def t_inCode_IN(t):
-    r'in'
+    r' in '
     return t
 
 def t_inCode_DO(t):
-    r'do'
+    r' do '
+    return t
+
+def t_inCode_ENDFOR(t):
+    r' endfor '
+    return t
+
+def t_inCode_IF(t):
+    r' if '
+    return t
+
+def t_inCode_ELSE(t):
+    r' else '
+    return t
+
+def t_inCode_ENDIF(t):
+    r' endif '
+    return t
+
+def t_inCode_PRINT(t):
+    r' print '
     return t
 
 def t_inCode_INTEGER(t):
@@ -58,14 +117,52 @@ def t_inCode_MUL_OP(t):
     r'\*|\/'
     return t
 
+def t_inCode_PAR_FERM(t):
+    r'\)'
+    return t
+
+def t_inCode_PAR_OUVR(t):
+    r'\('
+    return t
+
+def t_inCode_DOT_COMMA(t):
+    r';'
+    return t
+
+def t_inCode_COMMA(t):
+    r','
+    return t
+
+def t_inCode_DOT(t):
+    r'\.'
+    return t
+
+def t_inCode_EQUAL(t):
+    r':='
+    return t
+
+def t_inCode_VAR(t):
+    r'[\w]+'
+    return t
+
 def t_inCode_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
 t_ignore = ' \t'
+t_inString_ignore = ' \t'
+t_inCode_ignore = ' \t'
+
+def t_inString_error(t):
+    print("Illegalcharacter '%s'" %t.value[0])
+    t.lexer.skip(1)
+
+def t_inCode_error(t):
+    print("Illegalcharacter '%s'" %t.value[0])
+    t.lexer.skip(1)
 
 def t_error(t):
-    #print("Illegalcharacter '%s'" %t.value[0])
+    print("Illegalcharacter '%s'" %t.value[0])
     t.lexer.skip(1)
 
 if __name__ == '__main__':

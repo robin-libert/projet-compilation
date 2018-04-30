@@ -1,4 +1,10 @@
-{{coucou 42 zd66 8}}
-for element in tamere
-do	print "hello world"
-+-*/
+{{nom := 'Brouette';
+    
+    foret := 'Robin';
+    coursfor := ('Logique 1','Education sexuelle');
+     for c in cours
+        do print 'blabla'
+        endfor
+    if null
+    else lol
+    }}
