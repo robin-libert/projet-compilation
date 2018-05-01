@@ -28,7 +28,7 @@ tokens = (
     'DOT_COMMA',
     'COMMA',
     'DOT',
-    'EQUAL',
+    'ASSIGNEMENT',
     'APO',
     'STRING',
     'VAR'
@@ -137,7 +137,7 @@ def t_inCode_DOT(t):
     r'\.'
     return t
 
-def t_inCode_EQUAL(t):
+def t_inCode_ASSIGNEMENT(t):
     r':='
     return t
 

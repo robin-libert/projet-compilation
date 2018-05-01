@@ -1,0 +1,6 @@
+<html>
+	<head><title>Films {{ print label; }}</title></head>
+	<body>
+	  <h1><b>Films {{ print label; }}</b></h1>
+        </body>
+</html>
