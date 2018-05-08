@@ -31,7 +31,8 @@ tokens = (
     'ASSIGNEMENT',
     'APO',
     'STRING',
-    'VAR'
+    'VAR',
+    'TXT',
     )
 
 
@@ -39,6 +40,10 @@ tokens = (
 def t_BLOC_BEGIN(t):
     r'{{'
     t.lexer.begin('inCode')
+    return t
+
+def t_TXT(t):
+    r'[\w|;|&|<|>|\"|_|-|\.|\\|\/|\n|\p|:|\,| ]+'
     return t
 
 def t_newline(t):
@@ -149,7 +154,6 @@ def t_inCode_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-t_ignore = ' \t'
 t_inString_ignore = ' \t'
 t_inCode_ignore = ' \t'
 
@@ -165,9 +169,10 @@ def t_error(t):
     print("Illegalcharacter '%s'" %t.value[0])
     t.lexer.skip(1)
 
+lexer = lex.lex()
+
 if __name__ == '__main__':
     import sys
-    lexer = lex.lex()
     lexer.input(sys.stdin.read())
     for token in lexer:
         print("line %d : %s (%s) " %(token.lineno, token.type, token.value))

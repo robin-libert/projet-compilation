@@ -1,0 +1,539 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    IF
+    ELSE
+    ENDIF
+    MUL_OP
+    INTEGER
+    ADD_OP
+
+Grammar
+
+Rule 0     S' -> programme
+Rule 1     programme -> TXT
+Rule 2     programme -> TXT programme
+Rule 3     programme -> dumboBloc
+Rule 4     programme -> dumboBloc programme
+Rule 5     dumboBloc -> BLOC_BEGIN expressionList BLOC_END
+Rule 6     expressionList -> expression DOT_COMMA
+Rule 7     expressionList -> expression DOT_COMMA expressionList
+Rule 8     expression -> variable ASSIGNEMENT stringExpression
+Rule 9     expression -> variable ASSIGNEMENT stringList
+Rule 10    expression -> PRINT stringExpression
+Rule 11    expression -> FOR variable IN stringList DO expressionList ENDFOR
+Rule 12    expression -> FOR variable IN variable DO expressionList ENDFOR
+Rule 13    stringExpression -> variable
+Rule 14    stringExpression -> string
+Rule 15    stringExpression -> stringExpression DOT stringExpression
+Rule 16    stringList -> PAR_OUVR stringListInterior PAR_FERM
+Rule 17    stringListInterior -> string
+Rule 18    stringListInterior -> string COMMA stringListInterior
+Rule 19    variable -> VAR
+Rule 20    string -> APO STRING APO
+
+Terminals, with rules where they appear
+
+ADD_OP               : 
+APO                  : 20 20
+ASSIGNEMENT          : 8 9
+BLOC_BEGIN           : 5
+BLOC_END             : 5
+COMMA                : 18
+DO                   : 11 12
+DOT                  : 15
+DOT_COMMA            : 6 7
+ELSE                 : 
+ENDFOR               : 11 12
+ENDIF                : 
+FOR                  : 11 12
+IF                   : 
+IN                   : 11 12
+INTEGER              : 
+MUL_OP               : 
+PAR_FERM             : 16
+PAR_OUVR             : 16
+PRINT                : 10
+STRING               : 20
+TXT                  : 1 2
+VAR                  : 19
+error                : 
+
+Nonterminals, with rules where they appear
+
+dumboBloc            : 3 4
+expression           : 6 7
+expressionList       : 5 7 11 12
+programme            : 2 4 0
+string               : 14 17 18
+stringExpression     : 8 10 15 15
+stringList           : 9 11
+stringListInterior   : 16 18
+variable             : 8 9 11 12 12 13
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . programme
+    (1) programme -> . TXT
+    (2) programme -> . TXT programme
+    (3) programme -> . dumboBloc
+    (4) programme -> . dumboBloc programme
+    (5) dumboBloc -> . BLOC_BEGIN expressionList BLOC_END
+
+    TXT             shift and go to state 4
+    BLOC_BEGIN      shift and go to state 2
+
+    programme                      shift and go to state 3
+    dumboBloc                      shift and go to state 1
+
+state 1
+
+    (3) programme -> dumboBloc .
+    (4) programme -> dumboBloc . programme
+    (1) programme -> . TXT
+    (2) programme -> . TXT programme
+    (3) programme -> . dumboBloc
+    (4) programme -> . dumboBloc programme
+    (5) dumboBloc -> . BLOC_BEGIN expressionList BLOC_END
+
+    $end            reduce using rule 3 (programme -> dumboBloc .)
+    TXT             shift and go to state 4
+    BLOC_BEGIN      shift and go to state 2
+
+    programme                      shift and go to state 5
+    dumboBloc                      shift and go to state 1
+
+state 2
+
+    (5) dumboBloc -> BLOC_BEGIN . expressionList BLOC_END
+    (6) expressionList -> . expression DOT_COMMA
+    (7) expressionList -> . expression DOT_COMMA expressionList
+    (8) expression -> . variable ASSIGNEMENT stringExpression
+    (9) expression -> . variable ASSIGNEMENT stringList
+    (10) expression -> . PRINT stringExpression
+    (11) expression -> . FOR variable IN stringList DO expressionList ENDFOR
+    (12) expression -> . FOR variable IN variable DO expressionList ENDFOR
+    (19) variable -> . VAR
+
+    PRINT           shift and go to state 6
+    FOR             shift and go to state 7
+    VAR             shift and go to state 11
+
+    expression                     shift and go to state 9
+    expressionList                 shift and go to state 8
+    variable                       shift and go to state 10
+
+state 3
+
+    (0) S' -> programme .
+
+
+
+state 4
+
+    (1) programme -> TXT .
+    (2) programme -> TXT . programme
+    (1) programme -> . TXT
+    (2) programme -> . TXT programme
+    (3) programme -> . dumboBloc
+    (4) programme -> . dumboBloc programme
+    (5) dumboBloc -> . BLOC_BEGIN expressionList BLOC_END
+
+    $end            reduce using rule 1 (programme -> TXT .)
+    TXT             shift and go to state 4
+    BLOC_BEGIN      shift and go to state 2
+
+    programme                      shift and go to state 12
+    dumboBloc                      shift and go to state 1
+
+state 5
+
+    (4) programme -> dumboBloc programme .
+
+    $end            reduce using rule 4 (programme -> dumboBloc programme .)
+
+
+state 6
+
+    (10) expression -> PRINT . stringExpression
+    (13) stringExpression -> . variable
+    (14) stringExpression -> . string
+    (15) stringExpression -> . stringExpression DOT stringExpression
+    (19) variable -> . VAR
+    (20) string -> . APO STRING APO
+
+    VAR             shift and go to state 11
+    APO             shift and go to state 13
+
+    string                         shift and go to state 15
+    stringExpression               shift and go to state 14
+    variable                       shift and go to state 16
+
+state 7
+
+    (11) expression -> FOR . variable IN stringList DO expressionList ENDFOR
+    (12) expression -> FOR . variable IN variable DO expressionList ENDFOR
+    (19) variable -> . VAR
+
+    VAR             shift and go to state 11
+
+    variable                       shift and go to state 17
+
+state 8
+
+    (5) dumboBloc -> BLOC_BEGIN expressionList . BLOC_END
+
+    BLOC_END        shift and go to state 18
+
+
+state 9
+
+    (6) expressionList -> expression . DOT_COMMA
+    (7) expressionList -> expression . DOT_COMMA expressionList
+
+    DOT_COMMA       shift and go to state 19
+
+
+state 10
+
+    (8) expression -> variable . ASSIGNEMENT stringExpression
+    (9) expression -> variable . ASSIGNEMENT stringList
+
+    ASSIGNEMENT     shift and go to state 20
+
+
+state 11
+
+    (19) variable -> VAR .
+
+    DO              reduce using rule 19 (variable -> VAR .)
+    ASSIGNEMENT     reduce using rule 19 (variable -> VAR .)
+    DOT             reduce using rule 19 (variable -> VAR .)
+    DOT_COMMA       reduce using rule 19 (variable -> VAR .)
+    IN              reduce using rule 19 (variable -> VAR .)
+
+
+state 12
+
+    (2) programme -> TXT programme .
+
+    $end            reduce using rule 2 (programme -> TXT programme .)
+
+
+state 13
+
+    (20) string -> APO . STRING APO
+
+    STRING          shift and go to state 21
+
+
+state 14
+
+    (10) expression -> PRINT stringExpression .
+    (15) stringExpression -> stringExpression . DOT stringExpression
+
+    DOT_COMMA       reduce using rule 10 (expression -> PRINT stringExpression .)
+    DOT             shift and go to state 22
+
+
+state 15
+
+    (14) stringExpression -> string .
+
+    DOT             reduce using rule 14 (stringExpression -> string .)
+    DOT_COMMA       reduce using rule 14 (stringExpression -> string .)
+
+
+state 16
+
+    (13) stringExpression -> variable .
+
+    DOT             reduce using rule 13 (stringExpression -> variable .)
+    DOT_COMMA       reduce using rule 13 (stringExpression -> variable .)
+
+
+state 17
+
+    (11) expression -> FOR variable . IN stringList DO expressionList ENDFOR
+    (12) expression -> FOR variable . IN variable DO expressionList ENDFOR
+
+    IN              shift and go to state 23
+
+
+state 18
+
+    (5) dumboBloc -> BLOC_BEGIN expressionList BLOC_END .
+
+    TXT             reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
+    BLOC_BEGIN      reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
+    $end            reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
+
+
+state 19
+
+    (6) expressionList -> expression DOT_COMMA .
+    (7) expressionList -> expression DOT_COMMA . expressionList
+    (6) expressionList -> . expression DOT_COMMA
+    (7) expressionList -> . expression DOT_COMMA expressionList
+    (8) expression -> . variable ASSIGNEMENT stringExpression
+    (9) expression -> . variable ASSIGNEMENT stringList
+    (10) expression -> . PRINT stringExpression
+    (11) expression -> . FOR variable IN stringList DO expressionList ENDFOR
+    (12) expression -> . FOR variable IN variable DO expressionList ENDFOR
+    (19) variable -> . VAR
+
+    BLOC_END        reduce using rule 6 (expressionList -> expression DOT_COMMA .)
+    ENDFOR          reduce using rule 6 (expressionList -> expression DOT_COMMA .)
+    PRINT           shift and go to state 6
+    FOR             shift and go to state 7
+    VAR             shift and go to state 11
+
+    expression                     shift and go to state 9
+    expressionList                 shift and go to state 24
+    variable                       shift and go to state 10
+
+state 20
+
+    (8) expression -> variable ASSIGNEMENT . stringExpression
+    (9) expression -> variable ASSIGNEMENT . stringList
+    (13) stringExpression -> . variable
+    (14) stringExpression -> . string
+    (15) stringExpression -> . stringExpression DOT stringExpression
+    (16) stringList -> . PAR_OUVR stringListInterior PAR_FERM
+    (19) variable -> . VAR
+    (20) string -> . APO STRING APO
+
+    PAR_OUVR        shift and go to state 26
+    VAR             shift and go to state 11
+    APO             shift and go to state 13
+
+    stringList                     shift and go to state 27
+    string                         shift and go to state 15
+    stringExpression               shift and go to state 25
+    variable                       shift and go to state 16
+
+state 21
+
+    (20) string -> APO STRING . APO
+
+    APO             shift and go to state 28
+
+
+state 22
+
+    (15) stringExpression -> stringExpression DOT . stringExpression
+    (13) stringExpression -> . variable
+    (14) stringExpression -> . string
+    (15) stringExpression -> . stringExpression DOT stringExpression
+    (19) variable -> . VAR
+    (20) string -> . APO STRING APO
+
+    VAR             shift and go to state 11
+    APO             shift and go to state 13
+
+    string                         shift and go to state 15
+    stringExpression               shift and go to state 29
+    variable                       shift and go to state 16
+
+state 23
+
+    (11) expression -> FOR variable IN . stringList DO expressionList ENDFOR
+    (12) expression -> FOR variable IN . variable DO expressionList ENDFOR
+    (16) stringList -> . PAR_OUVR stringListInterior PAR_FERM
+    (19) variable -> . VAR
+
+    PAR_OUVR        shift and go to state 26
+    VAR             shift and go to state 11
+
+    stringList                     shift and go to state 31
+    variable                       shift and go to state 30
+
+state 24
+
+    (7) expressionList -> expression DOT_COMMA expressionList .
+
+    BLOC_END        reduce using rule 7 (expressionList -> expression DOT_COMMA expressionList .)
+    ENDFOR          reduce using rule 7 (expressionList -> expression DOT_COMMA expressionList .)
+
+
+state 25
+
+    (8) expression -> variable ASSIGNEMENT stringExpression .
+    (15) stringExpression -> stringExpression . DOT stringExpression
+
+    DOT_COMMA       reduce using rule 8 (expression -> variable ASSIGNEMENT stringExpression .)
+    DOT             shift and go to state 22
+
+
+state 26
+
+    (16) stringList -> PAR_OUVR . stringListInterior PAR_FERM
+    (17) stringListInterior -> . string
+    (18) stringListInterior -> . string COMMA stringListInterior
+    (20) string -> . APO STRING APO
+
+    APO             shift and go to state 13
+
+    stringListInterior             shift and go to state 32
+    string                         shift and go to state 33
+
+state 27
+
+    (9) expression -> variable ASSIGNEMENT stringList .
+
+    DOT_COMMA       reduce using rule 9 (expression -> variable ASSIGNEMENT stringList .)
+
+
+state 28
+
+    (20) string -> APO STRING APO .
+
+    DOT             reduce using rule 20 (string -> APO STRING APO .)
+    DOT_COMMA       reduce using rule 20 (string -> APO STRING APO .)
+    COMMA           reduce using rule 20 (string -> APO STRING APO .)
+    PAR_FERM        reduce using rule 20 (string -> APO STRING APO .)
+
+
+state 29
+
+    (15) stringExpression -> stringExpression DOT stringExpression .
+    (15) stringExpression -> stringExpression . DOT stringExpression
+
+  ! shift/reduce conflict for DOT resolved as shift
+    DOT_COMMA       reduce using rule 15 (stringExpression -> stringExpression DOT stringExpression .)
+    DOT             shift and go to state 22
+
+  ! DOT             [ reduce using rule 15 (stringExpression -> stringExpression DOT stringExpression .) ]
+
+
+state 30
+
+    (12) expression -> FOR variable IN variable . DO expressionList ENDFOR
+
+    DO              shift and go to state 34
+
+
+state 31
+
+    (11) expression -> FOR variable IN stringList . DO expressionList ENDFOR
+
+    DO              shift and go to state 35
+
+
+state 32
+
+    (16) stringList -> PAR_OUVR stringListInterior . PAR_FERM
+
+    PAR_FERM        shift and go to state 36
+
+
+state 33
+
+    (17) stringListInterior -> string .
+    (18) stringListInterior -> string . COMMA stringListInterior
+
+    PAR_FERM        reduce using rule 17 (stringListInterior -> string .)
+    COMMA           shift and go to state 37
+
+
+state 34
+
+    (12) expression -> FOR variable IN variable DO . expressionList ENDFOR
+    (6) expressionList -> . expression DOT_COMMA
+    (7) expressionList -> . expression DOT_COMMA expressionList
+    (8) expression -> . variable ASSIGNEMENT stringExpression
+    (9) expression -> . variable ASSIGNEMENT stringList
+    (10) expression -> . PRINT stringExpression
+    (11) expression -> . FOR variable IN stringList DO expressionList ENDFOR
+    (12) expression -> . FOR variable IN variable DO expressionList ENDFOR
+    (19) variable -> . VAR
+
+    PRINT           shift and go to state 6
+    FOR             shift and go to state 7
+    VAR             shift and go to state 11
+
+    expression                     shift and go to state 9
+    expressionList                 shift and go to state 38
+    variable                       shift and go to state 10
+
+state 35
+
+    (11) expression -> FOR variable IN stringList DO . expressionList ENDFOR
+    (6) expressionList -> . expression DOT_COMMA
+    (7) expressionList -> . expression DOT_COMMA expressionList
+    (8) expression -> . variable ASSIGNEMENT stringExpression
+    (9) expression -> . variable ASSIGNEMENT stringList
+    (10) expression -> . PRINT stringExpression
+    (11) expression -> . FOR variable IN stringList DO expressionList ENDFOR
+    (12) expression -> . FOR variable IN variable DO expressionList ENDFOR
+    (19) variable -> . VAR
+
+    PRINT           shift and go to state 6
+    FOR             shift and go to state 7
+    VAR             shift and go to state 11
+
+    expression                     shift and go to state 9
+    expressionList                 shift and go to state 39
+    variable                       shift and go to state 10
+
+state 36
+
+    (16) stringList -> PAR_OUVR stringListInterior PAR_FERM .
+
+    DO              reduce using rule 16 (stringList -> PAR_OUVR stringListInterior PAR_FERM .)
+    DOT_COMMA       reduce using rule 16 (stringList -> PAR_OUVR stringListInterior PAR_FERM .)
+
+
+state 37
+
+    (18) stringListInterior -> string COMMA . stringListInterior
+    (17) stringListInterior -> . string
+    (18) stringListInterior -> . string COMMA stringListInterior
+    (20) string -> . APO STRING APO
+
+    APO             shift and go to state 13
+
+    stringListInterior             shift and go to state 40
+    string                         shift and go to state 33
+
+state 38
+
+    (12) expression -> FOR variable IN variable DO expressionList . ENDFOR
+
+    ENDFOR          shift and go to state 41
+
+
+state 39
+
+    (11) expression -> FOR variable IN stringList DO expressionList . ENDFOR
+
+    ENDFOR          shift and go to state 42
+
+
+state 40
+
+    (18) stringListInterior -> string COMMA stringListInterior .
+
+    PAR_FERM        reduce using rule 18 (stringListInterior -> string COMMA stringListInterior .)
+
+
+state 41
+
+    (12) expression -> FOR variable IN variable DO expressionList ENDFOR .
+
+    DOT_COMMA       reduce using rule 12 (expression -> FOR variable IN variable DO expressionList ENDFOR .)
+
+
+state 42
+
+    (11) expression -> FOR variable IN stringList DO expressionList ENDFOR .
+
+    DOT_COMMA       reduce using rule 11 (expression -> FOR variable IN stringList DO expressionList ENDFOR .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for DOT in state 29 resolved as shift
