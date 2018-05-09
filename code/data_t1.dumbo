@@ -1,3 +1,4 @@
 {{
-YOLO := 'yola';
+YOLO := ('yola','test');
+rule := 'Quoitin est le meilleur';
 }}

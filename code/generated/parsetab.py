@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ADD_OP APO ASSIGNEMENT BLOC_BEGIN BLOC_END COMMA DO DOT DOT_COMMA ELSE ENDFOR ENDIF FOR IF IN INTEGER MUL_OP PAR_FERM PAR_OUVR PRINT STRING TXT VARprogramme : TXT \n                 | TXT programmeprogramme : dumboBloc\n                 | dumboBloc programmedumboBloc : BLOC_BEGIN expressionList BLOC_ENDexpressionList : expression DOT_COMMA\n                      | expression DOT_COMMA expressionListexpression : variable ASSIGNEMENT stringExpression\n                  | variable ASSIGNEMENT stringListexpression : PRINT stringExpressionexpression : FOR variable IN stringList DO expressionList ENDFORexpression : FOR variable IN variable DO expressionList ENDFORstringExpression : variable\n                        | string\n                        | stringExpression DOT stringExpressionstringList : PAR_OUVR stringListInterior PAR_FERMstringListInterior : string\n                          | string COMMA stringListInteriorvariable : VARstring : APO STRING APO'
+_lr_signature = 'ADD_OP APO ASSIGNEMENT BLOC_BEGIN BLOC_END COMMA DO DOT DOT_COMMA ELSE ENDFOR ENDIF FOR IF IN INTEGER MUL_OP PAR_FERM PAR_OUVR PRINT STRING TXT VARprogramme : TXT \n                 | TXT programmeprogramme : dumboBloc\n                 | dumboBloc programmedumboBloc : BLOC_BEGIN expressionList BLOC_ENDexpressionList : expression DOT_COMMA\n                      | expression DOT_COMMA expressionListexpression : variableN ASSIGNEMENT stringExpression\n                  | variableN ASSIGNEMENT stringListexpression : PRINT stringExpressionexpression : FOR variableN IN stringList DO expressionList ENDFOR\n                  | FOR variableN IN variable DO expressionList ENDFORstringExpression : variable\n                        | string\n                        | stringExpression DOT stringExpressionstringList : PAR_OUVR stringListInterior PAR_FERMstringListInterior : string\n                          | string COMMA stringListInteriorvariable : VARvariableN : VARstring : APO STRING APO'
     
-_lr_action_items = {'STRING':([13,],[21,]),'DO':([11,30,31,36,],[-19,34,35,-16,]),'APO':([6,20,21,22,26,37,],[13,13,28,13,13,13,]),'$end':([1,3,4,5,12,18,],[-3,0,-1,-4,-2,-5,]),'PAR_OUVR':([20,23,],[26,26,]),'PRINT':([2,19,34,35,],[6,6,6,6,]),'BLOC_END':([8,19,24,],[18,-6,-7,]),'FOR':([2,19,34,35,],[7,7,7,7,]),'ENDFOR':([19,24,38,39,],[-6,-7,41,42,]),'DOT_COMMA':([9,11,14,15,16,25,27,28,29,36,41,42,],[19,-19,-10,-14,-13,-8,-9,-20,-15,-16,-12,-11,]),'PAR_FERM':([28,32,33,40,],[-20,36,-17,-18,]),'DOT':([11,14,15,16,25,28,29,],[-19,22,-14,-13,22,-20,22,]),'IN':([11,17,],[-19,23,]),'BLOC_BEGIN':([0,1,4,18,],[2,2,2,-5,]),'ASSIGNEMENT':([10,11,],[20,-19,]),'COMMA':([28,33,],[-20,37,]),'TXT':([0,1,4,18,],[4,4,4,-5,]),'VAR':([2,6,7,19,20,22,23,34,35,],[11,11,11,11,11,11,11,11,11,]),}
+_lr_action_items = {'VAR':([4,8,11,19,21,22,27,37,38,],[7,14,7,14,7,14,14,7,7,]),'BLOC_BEGIN':([0,2,3,18,],[4,4,4,-5,]),'PRINT':([4,21,37,38,],[8,8,8,8,]),'PAR_FERM':([30,31,32,39,],[-21,35,-17,-18,]),'TXT':([0,2,3,18,],[2,2,2,-5,]),'DO':([14,33,34,35,],[-19,37,38,-16,]),'APO':([8,19,22,23,26,36,],[17,17,17,30,17,17,]),'DOT_COMMA':([12,13,14,15,16,24,25,29,30,35,42,43,],[21,-10,-19,-13,-14,-9,-8,-15,-21,-16,-12,-11,]),'PAR_OUVR':([19,27,],[26,26,]),'$end':([1,2,3,5,6,18,],[0,-1,-3,-2,-4,-5,]),'IN':([7,20,],[-20,27,]),'COMMA':([30,32,],[-21,36,]),'STRING':([17,],[23,]),'FOR':([4,21,37,38,],[11,11,11,11,]),'ASSIGNEMENT':([7,10,],[-20,19,]),'ENDFOR':([21,28,40,41,],[-6,-7,42,43,]),'BLOC_END':([9,21,28,],[18,-6,-7,]),'DOT':([13,14,15,16,25,29,30,],[22,-19,-13,-14,22,22,-21,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'stringListInterior':([26,37,],[32,40,]),'stringExpression':([6,20,22,],[14,25,29,]),'dumboBloc':([0,1,4,],[1,1,1,]),'expressionList':([2,19,34,35,],[8,24,38,39,]),'expression':([2,19,34,35,],[9,9,9,9,]),'programme':([0,1,4,],[3,5,12,]),'string':([6,20,22,26,37,],[15,15,15,33,33,]),'stringList':([20,23,],[27,31,]),'variable':([2,6,7,19,20,22,23,34,35,],[10,16,17,10,16,16,30,10,10,]),}
+_lr_goto_items = {'string':([8,19,22,26,36,],[16,16,16,32,32,]),'programme':([0,2,3,],[1,5,6,]),'stringListInterior':([26,36,],[31,39,]),'expressionList':([4,21,37,38,],[9,28,40,41,]),'dumboBloc':([0,2,3,],[3,3,3,]),'stringExpression':([8,19,22,],[13,25,29,]),'variableN':([4,11,21,37,38,],[10,20,10,10,10,]),'expression':([4,21,37,38,],[12,12,12,12,]),'stringList':([19,27,],[24,34,]),'variable':([8,19,22,27,],[15,15,15,33,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -34,17 +34,18 @@ _lr_productions = [
   ('dumboBloc -> BLOC_BEGIN expressionList BLOC_END','dumboBloc',3,'p_dumboBloc_expressionList','dumbo_synth.py',26),
   ('expressionList -> expression DOT_COMMA','expressionList',2,'p_expressionList_expression','dumbo_synth.py',30),
   ('expressionList -> expression DOT_COMMA expressionList','expressionList',3,'p_expressionList_expression','dumbo_synth.py',31),
-  ('expression -> variable ASSIGNEMENT stringExpression','expression',3,'p_expression_variable','dumbo_synth.py',38),
-  ('expression -> variable ASSIGNEMENT stringList','expression',3,'p_expression_variable','dumbo_synth.py',39),
+  ('expression -> variableN ASSIGNEMENT stringExpression','expression',3,'p_expression_variable','dumbo_synth.py',38),
+  ('expression -> variableN ASSIGNEMENT stringList','expression',3,'p_expression_variable','dumbo_synth.py',39),
   ('expression -> PRINT stringExpression','expression',2,'p_expression_print','dumbo_synth.py',43),
-  ('expression -> FOR variable IN stringList DO expressionList ENDFOR','expression',7,'p_expression_forList','dumbo_synth.py',47),
-  ('expression -> FOR variable IN variable DO expressionList ENDFOR','expression',7,'p_expression_forVariable','dumbo_synth.py',50),
-  ('stringExpression -> variable','stringExpression',1,'p_stringExpression','dumbo_synth.py',53),
-  ('stringExpression -> string','stringExpression',1,'p_stringExpression','dumbo_synth.py',54),
-  ('stringExpression -> stringExpression DOT stringExpression','stringExpression',3,'p_stringExpression','dumbo_synth.py',55),
-  ('stringList -> PAR_OUVR stringListInterior PAR_FERM','stringList',3,'p_stringList_int','dumbo_synth.py',62),
-  ('stringListInterior -> string','stringListInterior',1,'p_stringListInterior','dumbo_synth.py',66),
-  ('stringListInterior -> string COMMA stringListInterior','stringListInterior',3,'p_stringListInterior','dumbo_synth.py',67),
-  ('variable -> VAR','variable',1,'p_variable','dumbo_synth.py',74),
-  ('string -> APO STRING APO','string',3,'p_string_seString','dumbo_synth.py',78),
+  ('expression -> FOR variableN IN stringList DO expressionList ENDFOR','expression',7,'p_expression_forList','dumbo_synth.py',47),
+  ('expression -> FOR variableN IN variable DO expressionList ENDFOR','expression',7,'p_expression_forList','dumbo_synth.py',48),
+  ('stringExpression -> variable','stringExpression',1,'p_stringExpression','dumbo_synth.py',52),
+  ('stringExpression -> string','stringExpression',1,'p_stringExpression','dumbo_synth.py',53),
+  ('stringExpression -> stringExpression DOT stringExpression','stringExpression',3,'p_stringExpression','dumbo_synth.py',54),
+  ('stringList -> PAR_OUVR stringListInterior PAR_FERM','stringList',3,'p_stringList_int','dumbo_synth.py',61),
+  ('stringListInterior -> string','stringListInterior',1,'p_stringListInterior','dumbo_synth.py',65),
+  ('stringListInterior -> string COMMA stringListInterior','stringListInterior',3,'p_stringListInterior','dumbo_synth.py',66),
+  ('variable -> VAR','variable',1,'p_variable_dico','dumbo_synth.py',73),
+  ('variableN -> VAR','variableN',1,'p_variable_name','dumbo_synth.py',78),
+  ('string -> APO STRING APO','string',3,'p_string_seString','dumbo_synth.py',82),
 ]

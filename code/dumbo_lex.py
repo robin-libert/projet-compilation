@@ -43,7 +43,7 @@ def t_BLOC_BEGIN(t):
     return t
 
 def t_TXT(t):
-    r'[\w|;|&|<|>|\"|_|-|\.|\\|\/|\n|\p|:|\,| ]+'
+    r'[\w|;|&|<|>|\"|_|-|\.|\\|\/|\n|\p|:|\,| \t]+'
     return t
 
 def t_newline(t):
@@ -154,7 +154,6 @@ def t_inCode_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-t_inString_ignore = ' \t'
 t_inCode_ignore = ' \t'
 
 def t_inString_error(t):
