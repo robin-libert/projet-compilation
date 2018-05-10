@@ -33,6 +33,9 @@ tokens = (
     'STRING',
     'VAR',
     'TXT',
+    'OPERATOR',
+    'BINOPERATOR',
+    'BOOLEAN'
     )
 
 
@@ -146,6 +149,10 @@ def t_inCode_ASSIGNEMENT(t):
     r':='
     return t
 
+def t_inCode_BOOLEAN(t):
+    r'true|false'
+    return t
+
 def t_inCode_VAR(t):
     r'[\w]+'
     return t
@@ -153,6 +160,12 @@ def t_inCode_VAR(t):
 def t_inCode_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
+
+def t_inCode_OPERATOR(t):
+    r'<|>|=|!='
+
+def t_inCode_BINOPERATOR(t):
+    r'or|and'
 
 t_inCode_ignore = ' \t'
 
