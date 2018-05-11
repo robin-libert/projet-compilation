@@ -62,7 +62,7 @@ def p_expression_boolean(p):
 
 #string Expression
 def p_stringExpression(p):
-    '''stringExpression : integer
+    '''stringExpression : boolean
                         | string
                         | stringExpression DOT stringExpression'''
     if(len(p) == 2):
@@ -137,8 +137,12 @@ def p_boolean(p):
 
 #boolean operator
 def p_booleanOP(p):
-    '''booleanOP : integer OPERATOR integer'''
-    p[0] = booleanExpression(p[1],p[2],p[3])
+    '''booleanOP : integer OPERATOR integer
+                 | integer'''
+    if(len(p) == 2):
+        p[0] = booleanExpression(p[1], None, None)
+    elif(len(p) == 4):
+        p[0] = booleanExpression(p[1],p[2],p[3])
 
 #boolean var
 def p_booleanVar(p):

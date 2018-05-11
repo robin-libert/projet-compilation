@@ -17,7 +17,7 @@ Rule 11    expression -> FOR variableN IN list DO expressionList ENDFOR
 Rule 12    expression -> FOR variableN IN variable DO expressionList ENDFOR
 Rule 13    expression -> IF boolean DO expressionList ENDIF
 Rule 14    expression -> IF boolean DO expressionList ELSE expressionList ENDIF
-Rule 15    stringExpression -> integer
+Rule 15    stringExpression -> boolean
 Rule 16    stringExpression -> string
 Rule 17    stringExpression -> stringExpression DOT stringExpression
 Rule 18    list -> PAR_OUVR stringListInterior PAR_FERM
@@ -38,7 +38,8 @@ Rule 32    boolean -> booleanVar
 Rule 33    boolean -> booleanOP
 Rule 34    boolean -> boolean BINOPERATOR boolean
 Rule 35    booleanOP -> integer OPERATOR integer
-Rule 36    booleanVar -> BOOLEAN
+Rule 36    booleanOP -> integer
+Rule 37    booleanVar -> BOOLEAN
 
 Terminals, with rules where they appear
 
@@ -48,7 +49,7 @@ ASSIGNEMENT          : 8 9
 BINOPERATOR          : 34
 BLOC_BEGIN           : 5
 BLOC_END             : 5
-BOOLEAN              : 36
+BOOLEAN              : 37
 COMMA                : 21 23
 DO                   : 11 12 13 14
 DOT                  : 17
@@ -72,13 +73,13 @@ error                :
 
 Nonterminals, with rules where they appear
 
-boolean              : 13 14 34 34
+boolean              : 13 14 15 34 34
 booleanOP            : 33
 booleanVar           : 32
 dumboBloc            : 3 4
 expression           : 6 7
 expressionList       : 5 7 11 12 13 14 14
-integer              : 15 22 23 29 29 30 30 35 35
+integer              : 22 23 29 29 30 30 35 35 36
 integerListInterior  : 19 23
 integerVar           : 27
 list                 : 9 11
@@ -103,8 +104,8 @@ state 0
     TXT             shift and go to state 1
     BLOC_BEGIN      shift and go to state 3
 
-    programme                      shift and go to state 4
-    dumboBloc                      shift and go to state 2
+    programme                      shift and go to state 2
+    dumboBloc                      shift and go to state 4
 
 state 1
 
@@ -121,24 +122,13 @@ state 1
     BLOC_BEGIN      shift and go to state 3
 
     programme                      shift and go to state 5
-    dumboBloc                      shift and go to state 2
+    dumboBloc                      shift and go to state 4
 
 state 2
 
-    (3) programme -> dumboBloc .
-    (4) programme -> dumboBloc . programme
-    (1) programme -> . TXT
-    (2) programme -> . TXT programme
-    (3) programme -> . dumboBloc
-    (4) programme -> . dumboBloc programme
-    (5) dumboBloc -> . BLOC_BEGIN expressionList BLOC_END
+    (0) S' -> programme .
 
-    $end            reduce using rule 3 (programme -> dumboBloc .)
-    TXT             shift and go to state 1
-    BLOC_BEGIN      shift and go to state 3
 
-    programme                      shift and go to state 6
-    dumboBloc                      shift and go to state 2
 
 state 3
 
@@ -154,20 +144,31 @@ state 3
     (14) expression -> . IF boolean DO expressionList ELSE expressionList ENDIF
     (25) variableN -> . VAR
 
-    PRINT           shift and go to state 8
-    FOR             shift and go to state 10
-    IF              shift and go to state 13
-    VAR             shift and go to state 9
+    PRINT           shift and go to state 12
+    FOR             shift and go to state 8
+    IF              shift and go to state 7
+    VAR             shift and go to state 11
 
-    variableN                      shift and go to state 7
-    expression                     shift and go to state 12
-    expressionList                 shift and go to state 11
+    variableN                      shift and go to state 6
+    expression                     shift and go to state 9
+    expressionList                 shift and go to state 10
 
 state 4
 
-    (0) S' -> programme .
+    (3) programme -> dumboBloc .
+    (4) programme -> dumboBloc . programme
+    (1) programme -> . TXT
+    (2) programme -> . TXT programme
+    (3) programme -> . dumboBloc
+    (4) programme -> . dumboBloc programme
+    (5) dumboBloc -> . BLOC_BEGIN expressionList BLOC_END
 
+    $end            reduce using rule 3 (programme -> dumboBloc .)
+    TXT             shift and go to state 1
+    BLOC_BEGIN      shift and go to state 3
 
+    programme                      shift and go to state 13
+    dumboBloc                      shift and go to state 4
 
 state 5
 
@@ -178,69 +179,51 @@ state 5
 
 state 6
 
-    (4) programme -> dumboBloc programme .
-
-    $end            reduce using rule 4 (programme -> dumboBloc programme .)
-
-
-state 7
-
     (8) expression -> variableN . ASSIGNEMENT stringExpression
     (9) expression -> variableN . ASSIGNEMENT list
 
     ASSIGNEMENT     shift and go to state 14
 
 
-state 8
+state 7
 
-    (10) expression -> PRINT . stringExpression
-    (15) stringExpression -> . integer
-    (16) stringExpression -> . string
-    (17) stringExpression -> . stringExpression DOT stringExpression
+    (13) expression -> IF . boolean DO expressionList ENDIF
+    (14) expression -> IF . boolean DO expressionList ELSE expressionList ENDIF
+    (32) boolean -> . booleanVar
+    (33) boolean -> . booleanOP
+    (34) boolean -> . boolean BINOPERATOR boolean
+    (37) booleanVar -> . BOOLEAN
+    (35) booleanOP -> . integer OPERATOR integer
+    (36) booleanOP -> . integer
     (27) integer -> . integerVar
     (28) integer -> . variable
     (29) integer -> . integer ADD_OP integer
     (30) integer -> . integer MUL_OP integer
-    (26) string -> . APO STRING APO
     (31) integerVar -> . INTEGER
     (24) variable -> . VAR
 
-    APO             shift and go to state 21
-    INTEGER         shift and go to state 19
-    VAR             shift and go to state 15
+    BOOLEAN         shift and go to state 18
+    INTEGER         shift and go to state 22
+    VAR             shift and go to state 21
 
-    string                         shift and go to state 17
-    integerVar                     shift and go to state 18
-    variable                       shift and go to state 20
-    stringExpression               shift and go to state 22
-    integer                        shift and go to state 16
+    booleanVar                     shift and go to state 15
+    booleanOP                      shift and go to state 16
+    boolean                        shift and go to state 17
+    variable                       shift and go to state 19
+    integerVar                     shift and go to state 20
+    integer                        shift and go to state 23
 
-state 9
-
-    (25) variableN -> VAR .
-
-    ASSIGNEMENT     reduce using rule 25 (variableN -> VAR .)
-    IN              reduce using rule 25 (variableN -> VAR .)
-
-
-state 10
+state 8
 
     (11) expression -> FOR . variableN IN list DO expressionList ENDFOR
     (12) expression -> FOR . variableN IN variable DO expressionList ENDFOR
     (25) variableN -> . VAR
 
-    VAR             shift and go to state 9
+    VAR             shift and go to state 11
 
-    variableN                      shift and go to state 23
+    variableN                      shift and go to state 24
 
-state 11
-
-    (5) dumboBloc -> BLOC_BEGIN expressionList . BLOC_END
-
-    BLOC_END        shift and go to state 24
-
-
-state 12
+state 9
 
     (6) expressionList -> expression . DOT_COMMA
     (7) expressionList -> expression . DOT_COMMA expressionList
@@ -248,15 +231,34 @@ state 12
     DOT_COMMA       shift and go to state 25
 
 
-state 13
+state 10
 
-    (13) expression -> IF . boolean DO expressionList ENDIF
-    (14) expression -> IF . boolean DO expressionList ELSE expressionList ENDIF
+    (5) dumboBloc -> BLOC_BEGIN expressionList . BLOC_END
+
+    BLOC_END        shift and go to state 26
+
+
+state 11
+
+    (25) variableN -> VAR .
+
+    ASSIGNEMENT     reduce using rule 25 (variableN -> VAR .)
+    IN              reduce using rule 25 (variableN -> VAR .)
+
+
+state 12
+
+    (10) expression -> PRINT . stringExpression
+    (15) stringExpression -> . boolean
+    (16) stringExpression -> . string
+    (17) stringExpression -> . stringExpression DOT stringExpression
     (32) boolean -> . booleanVar
     (33) boolean -> . booleanOP
     (34) boolean -> . boolean BINOPERATOR boolean
-    (36) booleanVar -> . BOOLEAN
+    (26) string -> . APO STRING APO
+    (37) booleanVar -> . BOOLEAN
     (35) booleanOP -> . integer OPERATOR integer
+    (36) booleanOP -> . integer
     (27) integer -> . integerVar
     (28) integer -> . variable
     (29) integer -> . integer ADD_OP integer
@@ -264,157 +266,188 @@ state 13
     (31) integerVar -> . INTEGER
     (24) variable -> . VAR
 
-    BOOLEAN         shift and go to state 27
-    INTEGER         shift and go to state 19
-    VAR             shift and go to state 15
+    APO             shift and go to state 28
+    BOOLEAN         shift and go to state 18
+    INTEGER         shift and go to state 22
+    VAR             shift and go to state 21
 
-    variable                       shift and go to state 20
-    boolean                        shift and go to state 28
-    booleanOP                      shift and go to state 30
-    integer                        shift and go to state 26
-    integerVar                     shift and go to state 18
-    booleanVar                     shift and go to state 29
+    booleanVar                     shift and go to state 15
+    booleanOP                      shift and go to state 16
+    boolean                        shift and go to state 27
+    string                         shift and go to state 29
+    integerVar                     shift and go to state 20
+    integer                        shift and go to state 23
+    variable                       shift and go to state 19
+    stringExpression               shift and go to state 30
+
+state 13
+
+    (4) programme -> dumboBloc programme .
+
+    $end            reduce using rule 4 (programme -> dumboBloc programme .)
+
 
 state 14
 
     (8) expression -> variableN ASSIGNEMENT . stringExpression
     (9) expression -> variableN ASSIGNEMENT . list
-    (15) stringExpression -> . integer
+    (15) stringExpression -> . boolean
     (16) stringExpression -> . string
     (17) stringExpression -> . stringExpression DOT stringExpression
     (18) list -> . PAR_OUVR stringListInterior PAR_FERM
     (19) list -> . PAR_OUVR integerListInterior PAR_FERM
+    (32) boolean -> . booleanVar
+    (33) boolean -> . booleanOP
+    (34) boolean -> . boolean BINOPERATOR boolean
+    (26) string -> . APO STRING APO
+    (37) booleanVar -> . BOOLEAN
+    (35) booleanOP -> . integer OPERATOR integer
+    (36) booleanOP -> . integer
     (27) integer -> . integerVar
     (28) integer -> . variable
     (29) integer -> . integer ADD_OP integer
     (30) integer -> . integer MUL_OP integer
-    (26) string -> . APO STRING APO
     (31) integerVar -> . INTEGER
     (24) variable -> . VAR
 
     PAR_OUVR        shift and go to state 32
-    APO             shift and go to state 21
-    INTEGER         shift and go to state 19
-    VAR             shift and go to state 15
+    APO             shift and go to state 28
+    BOOLEAN         shift and go to state 18
+    INTEGER         shift and go to state 22
+    VAR             shift and go to state 21
 
+    booleanOP                      shift and go to state 16
     list                           shift and go to state 31
-    variable                       shift and go to state 20
-    integer                        shift and go to state 16
-    string                         shift and go to state 17
-    integerVar                     shift and go to state 18
+    booleanVar                     shift and go to state 15
+    integerVar                     shift and go to state 20
+    variable                       shift and go to state 19
+    string                         shift and go to state 29
+    boolean                        shift and go to state 27
+    integer                        shift and go to state 23
     stringExpression               shift and go to state 33
 
 state 15
 
-    (24) variable -> VAR .
+    (32) boolean -> booleanVar .
 
-    ADD_OP          reduce using rule 24 (variable -> VAR .)
-    MUL_OP          reduce using rule 24 (variable -> VAR .)
-    DOT             reduce using rule 24 (variable -> VAR .)
-    DOT_COMMA       reduce using rule 24 (variable -> VAR .)
-    OPERATOR        reduce using rule 24 (variable -> VAR .)
-    COMMA           reduce using rule 24 (variable -> VAR .)
-    PAR_FERM        reduce using rule 24 (variable -> VAR .)
-    DO              reduce using rule 24 (variable -> VAR .)
-    BINOPERATOR     reduce using rule 24 (variable -> VAR .)
+    BINOPERATOR     reduce using rule 32 (boolean -> booleanVar .)
+    DO              reduce using rule 32 (boolean -> booleanVar .)
+    DOT             reduce using rule 32 (boolean -> booleanVar .)
+    DOT_COMMA       reduce using rule 32 (boolean -> booleanVar .)
 
 
 state 16
 
-    (15) stringExpression -> integer .
-    (29) integer -> integer . ADD_OP integer
-    (30) integer -> integer . MUL_OP integer
+    (33) boolean -> booleanOP .
 
-    DOT             reduce using rule 15 (stringExpression -> integer .)
-    DOT_COMMA       reduce using rule 15 (stringExpression -> integer .)
-    ADD_OP          shift and go to state 35
-    MUL_OP          shift and go to state 34
+    BINOPERATOR     reduce using rule 33 (boolean -> booleanOP .)
+    DO              reduce using rule 33 (boolean -> booleanOP .)
+    DOT             reduce using rule 33 (boolean -> booleanOP .)
+    DOT_COMMA       reduce using rule 33 (boolean -> booleanOP .)
 
 
 state 17
 
-    (16) stringExpression -> string .
+    (13) expression -> IF boolean . DO expressionList ENDIF
+    (14) expression -> IF boolean . DO expressionList ELSE expressionList ENDIF
+    (34) boolean -> boolean . BINOPERATOR boolean
 
-    DOT             reduce using rule 16 (stringExpression -> string .)
-    DOT_COMMA       reduce using rule 16 (stringExpression -> string .)
+    DO              shift and go to state 34
+    BINOPERATOR     shift and go to state 35
 
 
 state 18
 
-    (27) integer -> integerVar .
+    (37) booleanVar -> BOOLEAN .
 
-    ADD_OP          reduce using rule 27 (integer -> integerVar .)
-    MUL_OP          reduce using rule 27 (integer -> integerVar .)
-    DOT             reduce using rule 27 (integer -> integerVar .)
-    DOT_COMMA       reduce using rule 27 (integer -> integerVar .)
-    DO              reduce using rule 27 (integer -> integerVar .)
-    BINOPERATOR     reduce using rule 27 (integer -> integerVar .)
-    OPERATOR        reduce using rule 27 (integer -> integerVar .)
-    COMMA           reduce using rule 27 (integer -> integerVar .)
-    PAR_FERM        reduce using rule 27 (integer -> integerVar .)
+    BINOPERATOR     reduce using rule 37 (booleanVar -> BOOLEAN .)
+    DOT             reduce using rule 37 (booleanVar -> BOOLEAN .)
+    DOT_COMMA       reduce using rule 37 (booleanVar -> BOOLEAN .)
+    DO              reduce using rule 37 (booleanVar -> BOOLEAN .)
 
 
 state 19
 
-    (31) integerVar -> INTEGER .
+    (28) integer -> variable .
 
-    ADD_OP          reduce using rule 31 (integerVar -> INTEGER .)
-    MUL_OP          reduce using rule 31 (integerVar -> INTEGER .)
-    DOT             reduce using rule 31 (integerVar -> INTEGER .)
-    DOT_COMMA       reduce using rule 31 (integerVar -> INTEGER .)
-    COMMA           reduce using rule 31 (integerVar -> INTEGER .)
-    PAR_FERM        reduce using rule 31 (integerVar -> INTEGER .)
-    DO              reduce using rule 31 (integerVar -> INTEGER .)
-    BINOPERATOR     reduce using rule 31 (integerVar -> INTEGER .)
-    OPERATOR        reduce using rule 31 (integerVar -> INTEGER .)
+    OPERATOR        reduce using rule 28 (integer -> variable .)
+    ADD_OP          reduce using rule 28 (integer -> variable .)
+    MUL_OP          reduce using rule 28 (integer -> variable .)
+    DO              reduce using rule 28 (integer -> variable .)
+    BINOPERATOR     reduce using rule 28 (integer -> variable .)
+    COMMA           reduce using rule 28 (integer -> variable .)
+    PAR_FERM        reduce using rule 28 (integer -> variable .)
+    DOT             reduce using rule 28 (integer -> variable .)
+    DOT_COMMA       reduce using rule 28 (integer -> variable .)
 
 
 state 20
 
-    (28) integer -> variable .
+    (27) integer -> integerVar .
 
-    ADD_OP          reduce using rule 28 (integer -> variable .)
-    MUL_OP          reduce using rule 28 (integer -> variable .)
-    DOT             reduce using rule 28 (integer -> variable .)
-    DOT_COMMA       reduce using rule 28 (integer -> variable .)
-    DO              reduce using rule 28 (integer -> variable .)
-    BINOPERATOR     reduce using rule 28 (integer -> variable .)
-    OPERATOR        reduce using rule 28 (integer -> variable .)
-    COMMA           reduce using rule 28 (integer -> variable .)
-    PAR_FERM        reduce using rule 28 (integer -> variable .)
+    OPERATOR        reduce using rule 27 (integer -> integerVar .)
+    ADD_OP          reduce using rule 27 (integer -> integerVar .)
+    MUL_OP          reduce using rule 27 (integer -> integerVar .)
+    DO              reduce using rule 27 (integer -> integerVar .)
+    BINOPERATOR     reduce using rule 27 (integer -> integerVar .)
+    COMMA           reduce using rule 27 (integer -> integerVar .)
+    PAR_FERM        reduce using rule 27 (integer -> integerVar .)
+    DOT             reduce using rule 27 (integer -> integerVar .)
+    DOT_COMMA       reduce using rule 27 (integer -> integerVar .)
 
 
 state 21
 
-    (26) string -> APO . STRING APO
+    (24) variable -> VAR .
 
-    STRING          shift and go to state 36
+    COMMA           reduce using rule 24 (variable -> VAR .)
+    ADD_OP          reduce using rule 24 (variable -> VAR .)
+    MUL_OP          reduce using rule 24 (variable -> VAR .)
+    PAR_FERM        reduce using rule 24 (variable -> VAR .)
+    OPERATOR        reduce using rule 24 (variable -> VAR .)
+    DO              reduce using rule 24 (variable -> VAR .)
+    BINOPERATOR     reduce using rule 24 (variable -> VAR .)
+    DOT             reduce using rule 24 (variable -> VAR .)
+    DOT_COMMA       reduce using rule 24 (variable -> VAR .)
 
 
 state 22
 
-    (10) expression -> PRINT stringExpression .
-    (17) stringExpression -> stringExpression . DOT stringExpression
+    (31) integerVar -> INTEGER .
 
-    DOT_COMMA       reduce using rule 10 (expression -> PRINT stringExpression .)
-    DOT             shift and go to state 37
+    COMMA           reduce using rule 31 (integerVar -> INTEGER .)
+    ADD_OP          reduce using rule 31 (integerVar -> INTEGER .)
+    MUL_OP          reduce using rule 31 (integerVar -> INTEGER .)
+    PAR_FERM        reduce using rule 31 (integerVar -> INTEGER .)
+    DO              reduce using rule 31 (integerVar -> INTEGER .)
+    BINOPERATOR     reduce using rule 31 (integerVar -> INTEGER .)
+    DOT             reduce using rule 31 (integerVar -> INTEGER .)
+    DOT_COMMA       reduce using rule 31 (integerVar -> INTEGER .)
+    OPERATOR        reduce using rule 31 (integerVar -> INTEGER .)
 
 
 state 23
 
-    (11) expression -> FOR variableN . IN list DO expressionList ENDFOR
-    (12) expression -> FOR variableN . IN variable DO expressionList ENDFOR
+    (35) booleanOP -> integer . OPERATOR integer
+    (36) booleanOP -> integer .
+    (29) integer -> integer . ADD_OP integer
+    (30) integer -> integer . MUL_OP integer
 
-    IN              shift and go to state 38
+    OPERATOR        shift and go to state 36
+    BINOPERATOR     reduce using rule 36 (booleanOP -> integer .)
+    DO              reduce using rule 36 (booleanOP -> integer .)
+    DOT             reduce using rule 36 (booleanOP -> integer .)
+    DOT_COMMA       reduce using rule 36 (booleanOP -> integer .)
+    ADD_OP          shift and go to state 38
+    MUL_OP          shift and go to state 37
 
 
 state 24
 
-    (5) dumboBloc -> BLOC_BEGIN expressionList BLOC_END .
+    (11) expression -> FOR variableN . IN list DO expressionList ENDFOR
+    (12) expression -> FOR variableN . IN variable DO expressionList ENDFOR
 
-    TXT             reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
-    BLOC_BEGIN      reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
-    $end            reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
+    IN              shift and go to state 39
 
 
 state 25
@@ -432,62 +465,60 @@ state 25
     (14) expression -> . IF boolean DO expressionList ELSE expressionList ENDIF
     (25) variableN -> . VAR
 
-    BLOC_END        reduce using rule 6 (expressionList -> expression DOT_COMMA .)
     ENDIF           reduce using rule 6 (expressionList -> expression DOT_COMMA .)
     ENDFOR          reduce using rule 6 (expressionList -> expression DOT_COMMA .)
     ELSE            reduce using rule 6 (expressionList -> expression DOT_COMMA .)
-    PRINT           shift and go to state 8
-    FOR             shift and go to state 10
-    IF              shift and go to state 13
-    VAR             shift and go to state 9
+    BLOC_END        reduce using rule 6 (expressionList -> expression DOT_COMMA .)
+    PRINT           shift and go to state 12
+    FOR             shift and go to state 8
+    IF              shift and go to state 7
+    VAR             shift and go to state 11
 
-    variableN                      shift and go to state 7
-    expressionList                 shift and go to state 39
-    expression                     shift and go to state 12
+    variableN                      shift and go to state 6
+    expression                     shift and go to state 9
+    expressionList                 shift and go to state 40
 
 state 26
 
-    (35) booleanOP -> integer . OPERATOR integer
-    (29) integer -> integer . ADD_OP integer
-    (30) integer -> integer . MUL_OP integer
+    (5) dumboBloc -> BLOC_BEGIN expressionList BLOC_END .
 
-    OPERATOR        shift and go to state 40
-    ADD_OP          shift and go to state 35
-    MUL_OP          shift and go to state 34
+    TXT             reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
+    BLOC_BEGIN      reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
+    $end            reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
 
 
 state 27
 
-    (36) booleanVar -> BOOLEAN .
+    (15) stringExpression -> boolean .
+    (34) boolean -> boolean . BINOPERATOR boolean
 
-    BINOPERATOR     reduce using rule 36 (booleanVar -> BOOLEAN .)
-    DO              reduce using rule 36 (booleanVar -> BOOLEAN .)
+    DOT             reduce using rule 15 (stringExpression -> boolean .)
+    DOT_COMMA       reduce using rule 15 (stringExpression -> boolean .)
+    BINOPERATOR     shift and go to state 35
 
 
 state 28
 
-    (13) expression -> IF boolean . DO expressionList ENDIF
-    (14) expression -> IF boolean . DO expressionList ELSE expressionList ENDIF
-    (34) boolean -> boolean . BINOPERATOR boolean
+    (26) string -> APO . STRING APO
 
-    DO              shift and go to state 41
-    BINOPERATOR     shift and go to state 42
+    STRING          shift and go to state 41
 
 
 state 29
 
-    (32) boolean -> booleanVar .
+    (16) stringExpression -> string .
 
-    BINOPERATOR     reduce using rule 32 (boolean -> booleanVar .)
-    DO              reduce using rule 32 (boolean -> booleanVar .)
+    DOT             reduce using rule 16 (stringExpression -> string .)
+    DOT_COMMA       reduce using rule 16 (stringExpression -> string .)
 
 
 state 30
 
-    (33) boolean -> booleanOP .
+    (10) expression -> PRINT stringExpression .
+    (17) stringExpression -> stringExpression . DOT stringExpression
 
-    BINOPERATOR     reduce using rule 33 (boolean -> booleanOP .)
-    DO              reduce using rule 33 (boolean -> booleanOP .)
+    DOT_COMMA       reduce using rule 10 (expression -> PRINT stringExpression .)
+    DOT             shift and go to state 42
 
 
 state 31
@@ -513,16 +544,16 @@ state 32
     (31) integerVar -> . INTEGER
     (24) variable -> . VAR
 
-    APO             shift and go to state 21
-    INTEGER         shift and go to state 19
-    VAR             shift and go to state 15
+    APO             shift and go to state 28
+    INTEGER         shift and go to state 22
+    VAR             shift and go to state 21
 
-    variable                       shift and go to state 20
-    integerListInterior            shift and go to state 45
-    stringListInterior             shift and go to state 46
-    integer                        shift and go to state 43
     string                         shift and go to state 44
-    integerVar                     shift and go to state 18
+    variable                       shift and go to state 19
+    integerVar                     shift and go to state 20
+    integer                        shift and go to state 45
+    stringListInterior             shift and go to state 43
+    integerListInterior            shift and go to state 46
 
 state 33
 
@@ -530,116 +561,10 @@ state 33
     (17) stringExpression -> stringExpression . DOT stringExpression
 
     DOT_COMMA       reduce using rule 8 (expression -> variableN ASSIGNEMENT stringExpression .)
-    DOT             shift and go to state 37
+    DOT             shift and go to state 42
 
 
 state 34
-
-    (30) integer -> integer MUL_OP . integer
-    (27) integer -> . integerVar
-    (28) integer -> . variable
-    (29) integer -> . integer ADD_OP integer
-    (30) integer -> . integer MUL_OP integer
-    (31) integerVar -> . INTEGER
-    (24) variable -> . VAR
-
-    INTEGER         shift and go to state 19
-    VAR             shift and go to state 15
-
-    variable                       shift and go to state 20
-    integerVar                     shift and go to state 18
-    integer                        shift and go to state 47
-
-state 35
-
-    (29) integer -> integer ADD_OP . integer
-    (27) integer -> . integerVar
-    (28) integer -> . variable
-    (29) integer -> . integer ADD_OP integer
-    (30) integer -> . integer MUL_OP integer
-    (31) integerVar -> . INTEGER
-    (24) variable -> . VAR
-
-    INTEGER         shift and go to state 19
-    VAR             shift and go to state 15
-
-    variable                       shift and go to state 20
-    integerVar                     shift and go to state 18
-    integer                        shift and go to state 48
-
-state 36
-
-    (26) string -> APO STRING . APO
-
-    APO             shift and go to state 49
-
-
-state 37
-
-    (17) stringExpression -> stringExpression DOT . stringExpression
-    (15) stringExpression -> . integer
-    (16) stringExpression -> . string
-    (17) stringExpression -> . stringExpression DOT stringExpression
-    (27) integer -> . integerVar
-    (28) integer -> . variable
-    (29) integer -> . integer ADD_OP integer
-    (30) integer -> . integer MUL_OP integer
-    (26) string -> . APO STRING APO
-    (31) integerVar -> . INTEGER
-    (24) variable -> . VAR
-
-    APO             shift and go to state 21
-    INTEGER         shift and go to state 19
-    VAR             shift and go to state 15
-
-    string                         shift and go to state 17
-    integerVar                     shift and go to state 18
-    variable                       shift and go to state 20
-    stringExpression               shift and go to state 50
-    integer                        shift and go to state 16
-
-state 38
-
-    (11) expression -> FOR variableN IN . list DO expressionList ENDFOR
-    (12) expression -> FOR variableN IN . variable DO expressionList ENDFOR
-    (18) list -> . PAR_OUVR stringListInterior PAR_FERM
-    (19) list -> . PAR_OUVR integerListInterior PAR_FERM
-    (24) variable -> . VAR
-
-    PAR_OUVR        shift and go to state 32
-    VAR             shift and go to state 15
-
-    list                           shift and go to state 51
-    variable                       shift and go to state 52
-
-state 39
-
-    (7) expressionList -> expression DOT_COMMA expressionList .
-
-    BLOC_END        reduce using rule 7 (expressionList -> expression DOT_COMMA expressionList .)
-    ENDIF           reduce using rule 7 (expressionList -> expression DOT_COMMA expressionList .)
-    ENDFOR          reduce using rule 7 (expressionList -> expression DOT_COMMA expressionList .)
-    ELSE            reduce using rule 7 (expressionList -> expression DOT_COMMA expressionList .)
-
-
-state 40
-
-    (35) booleanOP -> integer OPERATOR . integer
-    (27) integer -> . integerVar
-    (28) integer -> . variable
-    (29) integer -> . integer ADD_OP integer
-    (30) integer -> . integer MUL_OP integer
-    (31) integerVar -> . INTEGER
-    (24) variable -> . VAR
-
-    INTEGER         shift and go to state 19
-    VAR             shift and go to state 15
-
-    variable                       shift and go to state 20
-    integerVar                     shift and go to state 18
-    integer                        shift and go to state 53
-
-state 41
 
     (13) expression -> IF boolean DO . expressionList ENDIF
     (14) expression -> IF boolean DO . expressionList ELSE expressionList ENDIF
@@ -654,23 +579,24 @@ state 41
     (14) expression -> . IF boolean DO expressionList ELSE expressionList ENDIF
     (25) variableN -> . VAR
 
-    PRINT           shift and go to state 8
-    FOR             shift and go to state 10
-    IF              shift and go to state 13
-    VAR             shift and go to state 9
+    PRINT           shift and go to state 12
+    FOR             shift and go to state 8
+    IF              shift and go to state 7
+    VAR             shift and go to state 11
 
-    expression                     shift and go to state 12
-    variableN                      shift and go to state 7
-    expressionList                 shift and go to state 54
+    variableN                      shift and go to state 6
+    expression                     shift and go to state 9
+    expressionList                 shift and go to state 47
 
-state 42
+state 35
 
     (34) boolean -> boolean BINOPERATOR . boolean
     (32) boolean -> . booleanVar
     (33) boolean -> . booleanOP
     (34) boolean -> . boolean BINOPERATOR boolean
-    (36) booleanVar -> . BOOLEAN
+    (37) booleanVar -> . BOOLEAN
     (35) booleanOP -> . integer OPERATOR integer
+    (36) booleanOP -> . integer
     (27) integer -> . integerVar
     (28) integer -> . variable
     (29) integer -> . integer ADD_OP integer
@@ -678,28 +604,138 @@ state 42
     (31) integerVar -> . INTEGER
     (24) variable -> . VAR
 
-    BOOLEAN         shift and go to state 27
-    INTEGER         shift and go to state 19
-    VAR             shift and go to state 15
+    BOOLEAN         shift and go to state 18
+    INTEGER         shift and go to state 22
+    VAR             shift and go to state 21
 
-    variable                       shift and go to state 20
-    boolean                        shift and go to state 55
-    booleanOP                      shift and go to state 30
-    integer                        shift and go to state 26
-    integerVar                     shift and go to state 18
-    booleanVar                     shift and go to state 29
+    booleanVar                     shift and go to state 15
+    booleanOP                      shift and go to state 16
+    boolean                        shift and go to state 48
+    variable                       shift and go to state 19
+    integerVar                     shift and go to state 20
+    integer                        shift and go to state 23
+
+state 36
+
+    (35) booleanOP -> integer OPERATOR . integer
+    (27) integer -> . integerVar
+    (28) integer -> . variable
+    (29) integer -> . integer ADD_OP integer
+    (30) integer -> . integer MUL_OP integer
+    (31) integerVar -> . INTEGER
+    (24) variable -> . VAR
+
+    INTEGER         shift and go to state 22
+    VAR             shift and go to state 21
+
+    integerVar                     shift and go to state 20
+    variable                       shift and go to state 19
+    integer                        shift and go to state 49
+
+state 37
+
+    (30) integer -> integer MUL_OP . integer
+    (27) integer -> . integerVar
+    (28) integer -> . variable
+    (29) integer -> . integer ADD_OP integer
+    (30) integer -> . integer MUL_OP integer
+    (31) integerVar -> . INTEGER
+    (24) variable -> . VAR
+
+    INTEGER         shift and go to state 22
+    VAR             shift and go to state 21
+
+    integerVar                     shift and go to state 20
+    variable                       shift and go to state 19
+    integer                        shift and go to state 50
+
+state 38
+
+    (29) integer -> integer ADD_OP . integer
+    (27) integer -> . integerVar
+    (28) integer -> . variable
+    (29) integer -> . integer ADD_OP integer
+    (30) integer -> . integer MUL_OP integer
+    (31) integerVar -> . INTEGER
+    (24) variable -> . VAR
+
+    INTEGER         shift and go to state 22
+    VAR             shift and go to state 21
+
+    integerVar                     shift and go to state 20
+    variable                       shift and go to state 19
+    integer                        shift and go to state 51
+
+state 39
+
+    (11) expression -> FOR variableN IN . list DO expressionList ENDFOR
+    (12) expression -> FOR variableN IN . variable DO expressionList ENDFOR
+    (18) list -> . PAR_OUVR stringListInterior PAR_FERM
+    (19) list -> . PAR_OUVR integerListInterior PAR_FERM
+    (24) variable -> . VAR
+
+    PAR_OUVR        shift and go to state 32
+    VAR             shift and go to state 21
+
+    list                           shift and go to state 52
+    variable                       shift and go to state 53
+
+state 40
+
+    (7) expressionList -> expression DOT_COMMA expressionList .
+
+    ENDIF           reduce using rule 7 (expressionList -> expression DOT_COMMA expressionList .)
+    ENDFOR          reduce using rule 7 (expressionList -> expression DOT_COMMA expressionList .)
+    ELSE            reduce using rule 7 (expressionList -> expression DOT_COMMA expressionList .)
+    BLOC_END        reduce using rule 7 (expressionList -> expression DOT_COMMA expressionList .)
+
+
+state 41
+
+    (26) string -> APO STRING . APO
+
+    APO             shift and go to state 54
+
+
+state 42
+
+    (17) stringExpression -> stringExpression DOT . stringExpression
+    (15) stringExpression -> . boolean
+    (16) stringExpression -> . string
+    (17) stringExpression -> . stringExpression DOT stringExpression
+    (32) boolean -> . booleanVar
+    (33) boolean -> . booleanOP
+    (34) boolean -> . boolean BINOPERATOR boolean
+    (26) string -> . APO STRING APO
+    (37) booleanVar -> . BOOLEAN
+    (35) booleanOP -> . integer OPERATOR integer
+    (36) booleanOP -> . integer
+    (27) integer -> . integerVar
+    (28) integer -> . variable
+    (29) integer -> . integer ADD_OP integer
+    (30) integer -> . integer MUL_OP integer
+    (31) integerVar -> . INTEGER
+    (24) variable -> . VAR
+
+    APO             shift and go to state 28
+    BOOLEAN         shift and go to state 18
+    INTEGER         shift and go to state 22
+    VAR             shift and go to state 21
+
+    booleanVar                     shift and go to state 15
+    booleanOP                      shift and go to state 16
+    boolean                        shift and go to state 27
+    string                         shift and go to state 29
+    integerVar                     shift and go to state 20
+    integer                        shift and go to state 23
+    variable                       shift and go to state 19
+    stringExpression               shift and go to state 55
 
 state 43
 
-    (22) integerListInterior -> integer .
-    (23) integerListInterior -> integer . COMMA integerListInterior
-    (29) integer -> integer . ADD_OP integer
-    (30) integer -> integer . MUL_OP integer
+    (18) list -> PAR_OUVR stringListInterior . PAR_FERM
 
-    PAR_FERM        reduce using rule 22 (integerListInterior -> integer .)
-    COMMA           shift and go to state 56
-    ADD_OP          shift and go to state 35
-    MUL_OP          shift and go to state 34
+    PAR_FERM        shift and go to state 56
 
 
 state 44
@@ -713,59 +749,115 @@ state 44
 
 state 45
 
-    (19) list -> PAR_OUVR integerListInterior . PAR_FERM
+    (22) integerListInterior -> integer .
+    (23) integerListInterior -> integer . COMMA integerListInterior
+    (29) integer -> integer . ADD_OP integer
+    (30) integer -> integer . MUL_OP integer
 
-    PAR_FERM        shift and go to state 58
+    PAR_FERM        reduce using rule 22 (integerListInterior -> integer .)
+    COMMA           shift and go to state 58
+    ADD_OP          shift and go to state 38
+    MUL_OP          shift and go to state 37
 
 
 state 46
 
-    (18) list -> PAR_OUVR stringListInterior . PAR_FERM
+    (19) list -> PAR_OUVR integerListInterior . PAR_FERM
 
     PAR_FERM        shift and go to state 59
 
 
 state 47
 
+    (13) expression -> IF boolean DO expressionList . ENDIF
+    (14) expression -> IF boolean DO expressionList . ELSE expressionList ENDIF
+
+    ENDIF           shift and go to state 61
+    ELSE            shift and go to state 60
+
+
+state 48
+
+    (34) boolean -> boolean BINOPERATOR boolean .
+    (34) boolean -> boolean . BINOPERATOR boolean
+
+    BINOPERATOR     reduce using rule 34 (boolean -> boolean BINOPERATOR boolean .)
+    DO              reduce using rule 34 (boolean -> boolean BINOPERATOR boolean .)
+    DOT             reduce using rule 34 (boolean -> boolean BINOPERATOR boolean .)
+    DOT_COMMA       reduce using rule 34 (boolean -> boolean BINOPERATOR boolean .)
+
+  ! BINOPERATOR     [ shift and go to state 35 ]
+
+
+state 49
+
+    (35) booleanOP -> integer OPERATOR integer .
+    (29) integer -> integer . ADD_OP integer
+    (30) integer -> integer . MUL_OP integer
+
+    BINOPERATOR     reduce using rule 35 (booleanOP -> integer OPERATOR integer .)
+    DO              reduce using rule 35 (booleanOP -> integer OPERATOR integer .)
+    DOT             reduce using rule 35 (booleanOP -> integer OPERATOR integer .)
+    DOT_COMMA       reduce using rule 35 (booleanOP -> integer OPERATOR integer .)
+    ADD_OP          shift and go to state 38
+    MUL_OP          shift and go to state 37
+
+
+state 50
+
     (30) integer -> integer MUL_OP integer .
     (29) integer -> integer . ADD_OP integer
     (30) integer -> integer . MUL_OP integer
 
+    OPERATOR        reduce using rule 30 (integer -> integer MUL_OP integer .)
     ADD_OP          reduce using rule 30 (integer -> integer MUL_OP integer .)
     MUL_OP          reduce using rule 30 (integer -> integer MUL_OP integer .)
-    DOT             reduce using rule 30 (integer -> integer MUL_OP integer .)
-    DOT_COMMA       reduce using rule 30 (integer -> integer MUL_OP integer .)
     DO              reduce using rule 30 (integer -> integer MUL_OP integer .)
     BINOPERATOR     reduce using rule 30 (integer -> integer MUL_OP integer .)
-    OPERATOR        reduce using rule 30 (integer -> integer MUL_OP integer .)
     COMMA           reduce using rule 30 (integer -> integer MUL_OP integer .)
     PAR_FERM        reduce using rule 30 (integer -> integer MUL_OP integer .)
+    DOT             reduce using rule 30 (integer -> integer MUL_OP integer .)
+    DOT_COMMA       reduce using rule 30 (integer -> integer MUL_OP integer .)
 
-  ! ADD_OP          [ shift and go to state 35 ]
-  ! MUL_OP          [ shift and go to state 34 ]
+  ! ADD_OP          [ shift and go to state 38 ]
+  ! MUL_OP          [ shift and go to state 37 ]
 
 
-state 48
+state 51
 
     (29) integer -> integer ADD_OP integer .
     (29) integer -> integer . ADD_OP integer
     (30) integer -> integer . MUL_OP integer
 
+    OPERATOR        reduce using rule 29 (integer -> integer ADD_OP integer .)
     ADD_OP          reduce using rule 29 (integer -> integer ADD_OP integer .)
-    DOT             reduce using rule 29 (integer -> integer ADD_OP integer .)
-    DOT_COMMA       reduce using rule 29 (integer -> integer ADD_OP integer .)
     DO              reduce using rule 29 (integer -> integer ADD_OP integer .)
     BINOPERATOR     reduce using rule 29 (integer -> integer ADD_OP integer .)
-    OPERATOR        reduce using rule 29 (integer -> integer ADD_OP integer .)
     COMMA           reduce using rule 29 (integer -> integer ADD_OP integer .)
     PAR_FERM        reduce using rule 29 (integer -> integer ADD_OP integer .)
-    MUL_OP          shift and go to state 34
+    DOT             reduce using rule 29 (integer -> integer ADD_OP integer .)
+    DOT_COMMA       reduce using rule 29 (integer -> integer ADD_OP integer .)
+    MUL_OP          shift and go to state 37
 
   ! MUL_OP          [ reduce using rule 29 (integer -> integer ADD_OP integer .) ]
-  ! ADD_OP          [ shift and go to state 35 ]
+  ! ADD_OP          [ shift and go to state 38 ]
 
 
-state 49
+state 52
+
+    (11) expression -> FOR variableN IN list . DO expressionList ENDFOR
+
+    DO              shift and go to state 62
+
+
+state 53
+
+    (12) expression -> FOR variableN IN variable . DO expressionList ENDFOR
+
+    DO              shift and go to state 63
+
+
+state 54
 
     (26) string -> APO STRING APO .
 
@@ -775,7 +867,7 @@ state 49
     DOT_COMMA       reduce using rule 26 (string -> APO STRING APO .)
 
 
-state 50
+state 55
 
     (17) stringExpression -> stringExpression DOT stringExpression .
     (17) stringExpression -> stringExpression . DOT stringExpression
@@ -783,56 +875,30 @@ state 50
     DOT             reduce using rule 17 (stringExpression -> stringExpression DOT stringExpression .)
     DOT_COMMA       reduce using rule 17 (stringExpression -> stringExpression DOT stringExpression .)
 
-  ! DOT             [ shift and go to state 37 ]
-
-
-state 51
-
-    (11) expression -> FOR variableN IN list . DO expressionList ENDFOR
-
-    DO              shift and go to state 60
-
-
-state 52
-
-    (12) expression -> FOR variableN IN variable . DO expressionList ENDFOR
-
-    DO              shift and go to state 61
-
-
-state 53
-
-    (35) booleanOP -> integer OPERATOR integer .
-    (29) integer -> integer . ADD_OP integer
-    (30) integer -> integer . MUL_OP integer
-
-    BINOPERATOR     reduce using rule 35 (booleanOP -> integer OPERATOR integer .)
-    DO              reduce using rule 35 (booleanOP -> integer OPERATOR integer .)
-    ADD_OP          shift and go to state 35
-    MUL_OP          shift and go to state 34
-
-
-state 54
-
-    (13) expression -> IF boolean DO expressionList . ENDIF
-    (14) expression -> IF boolean DO expressionList . ELSE expressionList ENDIF
-
-    ENDIF           shift and go to state 62
-    ELSE            shift and go to state 63
-
-
-state 55
-
-    (34) boolean -> boolean BINOPERATOR boolean .
-    (34) boolean -> boolean . BINOPERATOR boolean
-
-    BINOPERATOR     reduce using rule 34 (boolean -> boolean BINOPERATOR boolean .)
-    DO              reduce using rule 34 (boolean -> boolean BINOPERATOR boolean .)
-
-  ! BINOPERATOR     [ shift and go to state 42 ]
+  ! DOT             [ shift and go to state 42 ]
 
 
 state 56
+
+    (18) list -> PAR_OUVR stringListInterior PAR_FERM .
+
+    DOT_COMMA       reduce using rule 18 (list -> PAR_OUVR stringListInterior PAR_FERM .)
+    DO              reduce using rule 18 (list -> PAR_OUVR stringListInterior PAR_FERM .)
+
+
+state 57
+
+    (21) stringListInterior -> string COMMA . stringListInterior
+    (20) stringListInterior -> . string
+    (21) stringListInterior -> . string COMMA stringListInterior
+    (26) string -> . APO STRING APO
+
+    APO             shift and go to state 28
+
+    string                         shift and go to state 44
+    stringListInterior             shift and go to state 64
+
+state 58
 
     (23) integerListInterior -> integer COMMA . integerListInterior
     (22) integerListInterior -> . integer
@@ -844,27 +910,15 @@ state 56
     (31) integerVar -> . INTEGER
     (24) variable -> . VAR
 
-    INTEGER         shift and go to state 19
-    VAR             shift and go to state 15
+    INTEGER         shift and go to state 22
+    VAR             shift and go to state 21
 
-    variable                       shift and go to state 20
-    integerVar                     shift and go to state 18
-    integerListInterior            shift and go to state 64
-    integer                        shift and go to state 43
+    integerVar                     shift and go to state 20
+    variable                       shift and go to state 19
+    integer                        shift and go to state 45
+    integerListInterior            shift and go to state 65
 
-state 57
-
-    (21) stringListInterior -> string COMMA . stringListInterior
-    (20) stringListInterior -> . string
-    (21) stringListInterior -> . string COMMA stringListInterior
-    (26) string -> . APO STRING APO
-
-    APO             shift and go to state 21
-
-    string                         shift and go to state 44
-    stringListInterior             shift and go to state 65
-
-state 58
+state 59
 
     (19) list -> PAR_OUVR integerListInterior PAR_FERM .
 
@@ -872,68 +926,7 @@ state 58
     DO              reduce using rule 19 (list -> PAR_OUVR integerListInterior PAR_FERM .)
 
 
-state 59
-
-    (18) list -> PAR_OUVR stringListInterior PAR_FERM .
-
-    DOT_COMMA       reduce using rule 18 (list -> PAR_OUVR stringListInterior PAR_FERM .)
-    DO              reduce using rule 18 (list -> PAR_OUVR stringListInterior PAR_FERM .)
-
-
 state 60
-
-    (11) expression -> FOR variableN IN list DO . expressionList ENDFOR
-    (6) expressionList -> . expression DOT_COMMA
-    (7) expressionList -> . expression DOT_COMMA expressionList
-    (8) expression -> . variableN ASSIGNEMENT stringExpression
-    (9) expression -> . variableN ASSIGNEMENT list
-    (10) expression -> . PRINT stringExpression
-    (11) expression -> . FOR variableN IN list DO expressionList ENDFOR
-    (12) expression -> . FOR variableN IN variable DO expressionList ENDFOR
-    (13) expression -> . IF boolean DO expressionList ENDIF
-    (14) expression -> . IF boolean DO expressionList ELSE expressionList ENDIF
-    (25) variableN -> . VAR
-
-    PRINT           shift and go to state 8
-    FOR             shift and go to state 10
-    IF              shift and go to state 13
-    VAR             shift and go to state 9
-
-    variableN                      shift and go to state 7
-    expression                     shift and go to state 12
-    expressionList                 shift and go to state 66
-
-state 61
-
-    (12) expression -> FOR variableN IN variable DO . expressionList ENDFOR
-    (6) expressionList -> . expression DOT_COMMA
-    (7) expressionList -> . expression DOT_COMMA expressionList
-    (8) expression -> . variableN ASSIGNEMENT stringExpression
-    (9) expression -> . variableN ASSIGNEMENT list
-    (10) expression -> . PRINT stringExpression
-    (11) expression -> . FOR variableN IN list DO expressionList ENDFOR
-    (12) expression -> . FOR variableN IN variable DO expressionList ENDFOR
-    (13) expression -> . IF boolean DO expressionList ENDIF
-    (14) expression -> . IF boolean DO expressionList ELSE expressionList ENDIF
-    (25) variableN -> . VAR
-
-    PRINT           shift and go to state 8
-    FOR             shift and go to state 10
-    IF              shift and go to state 13
-    VAR             shift and go to state 9
-
-    variableN                      shift and go to state 7
-    expression                     shift and go to state 12
-    expressionList                 shift and go to state 67
-
-state 62
-
-    (13) expression -> IF boolean DO expressionList ENDIF .
-
-    DOT_COMMA       reduce using rule 13 (expression -> IF boolean DO expressionList ENDIF .)
-
-
-state 63
 
     (14) expression -> IF boolean DO expressionList ELSE . expressionList ENDIF
     (6) expressionList -> . expression DOT_COMMA
@@ -947,67 +940,120 @@ state 63
     (14) expression -> . IF boolean DO expressionList ELSE expressionList ENDIF
     (25) variableN -> . VAR
 
-    PRINT           shift and go to state 8
-    FOR             shift and go to state 10
-    IF              shift and go to state 13
-    VAR             shift and go to state 9
+    PRINT           shift and go to state 12
+    FOR             shift and go to state 8
+    IF              shift and go to state 7
+    VAR             shift and go to state 11
 
-    expression                     shift and go to state 12
-    variableN                      shift and go to state 7
+    variableN                      shift and go to state 6
+    expression                     shift and go to state 9
+    expressionList                 shift and go to state 66
+
+state 61
+
+    (13) expression -> IF boolean DO expressionList ENDIF .
+
+    DOT_COMMA       reduce using rule 13 (expression -> IF boolean DO expressionList ENDIF .)
+
+
+state 62
+
+    (11) expression -> FOR variableN IN list DO . expressionList ENDFOR
+    (6) expressionList -> . expression DOT_COMMA
+    (7) expressionList -> . expression DOT_COMMA expressionList
+    (8) expression -> . variableN ASSIGNEMENT stringExpression
+    (9) expression -> . variableN ASSIGNEMENT list
+    (10) expression -> . PRINT stringExpression
+    (11) expression -> . FOR variableN IN list DO expressionList ENDFOR
+    (12) expression -> . FOR variableN IN variable DO expressionList ENDFOR
+    (13) expression -> . IF boolean DO expressionList ENDIF
+    (14) expression -> . IF boolean DO expressionList ELSE expressionList ENDIF
+    (25) variableN -> . VAR
+
+    PRINT           shift and go to state 12
+    FOR             shift and go to state 8
+    IF              shift and go to state 7
+    VAR             shift and go to state 11
+
+    variableN                      shift and go to state 6
+    expression                     shift and go to state 9
+    expressionList                 shift and go to state 67
+
+state 63
+
+    (12) expression -> FOR variableN IN variable DO . expressionList ENDFOR
+    (6) expressionList -> . expression DOT_COMMA
+    (7) expressionList -> . expression DOT_COMMA expressionList
+    (8) expression -> . variableN ASSIGNEMENT stringExpression
+    (9) expression -> . variableN ASSIGNEMENT list
+    (10) expression -> . PRINT stringExpression
+    (11) expression -> . FOR variableN IN list DO expressionList ENDFOR
+    (12) expression -> . FOR variableN IN variable DO expressionList ENDFOR
+    (13) expression -> . IF boolean DO expressionList ENDIF
+    (14) expression -> . IF boolean DO expressionList ELSE expressionList ENDIF
+    (25) variableN -> . VAR
+
+    PRINT           shift and go to state 12
+    FOR             shift and go to state 8
+    IF              shift and go to state 7
+    VAR             shift and go to state 11
+
+    variableN                      shift and go to state 6
+    expression                     shift and go to state 9
     expressionList                 shift and go to state 68
 
 state 64
-
-    (23) integerListInterior -> integer COMMA integerListInterior .
-
-    PAR_FERM        reduce using rule 23 (integerListInterior -> integer COMMA integerListInterior .)
-
-
-state 65
 
     (21) stringListInterior -> string COMMA stringListInterior .
 
     PAR_FERM        reduce using rule 21 (stringListInterior -> string COMMA stringListInterior .)
 
 
+state 65
+
+    (23) integerListInterior -> integer COMMA integerListInterior .
+
+    PAR_FERM        reduce using rule 23 (integerListInterior -> integer COMMA integerListInterior .)
+
+
 state 66
 
-    (11) expression -> FOR variableN IN list DO expressionList . ENDFOR
+    (14) expression -> IF boolean DO expressionList ELSE expressionList . ENDIF
 
-    ENDFOR          shift and go to state 69
+    ENDIF           shift and go to state 69
 
 
 state 67
 
-    (12) expression -> FOR variableN IN variable DO expressionList . ENDFOR
+    (11) expression -> FOR variableN IN list DO expressionList . ENDFOR
 
     ENDFOR          shift and go to state 70
 
 
 state 68
 
-    (14) expression -> IF boolean DO expressionList ELSE expressionList . ENDIF
+    (12) expression -> FOR variableN IN variable DO expressionList . ENDFOR
 
-    ENDIF           shift and go to state 71
+    ENDFOR          shift and go to state 71
 
 
 state 69
+
+    (14) expression -> IF boolean DO expressionList ELSE expressionList ENDIF .
+
+    DOT_COMMA       reduce using rule 14 (expression -> IF boolean DO expressionList ELSE expressionList ENDIF .)
+
+
+state 70
 
     (11) expression -> FOR variableN IN list DO expressionList ENDFOR .
 
     DOT_COMMA       reduce using rule 11 (expression -> FOR variableN IN list DO expressionList ENDFOR .)
 
 
-state 70
+state 71
 
     (12) expression -> FOR variableN IN variable DO expressionList ENDFOR .
 
     DOT_COMMA       reduce using rule 12 (expression -> FOR variableN IN variable DO expressionList ENDFOR .)
-
-
-state 71
-
-    (14) expression -> IF boolean DO expressionList ELSE expressionList ENDIF .
-
-    DOT_COMMA       reduce using rule 14 (expression -> IF boolean DO expressionList ELSE expressionList ENDIF .)
 

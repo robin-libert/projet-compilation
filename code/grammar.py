@@ -64,7 +64,7 @@ class globalInteger:
         else:
             return operations[self.opera](self.var1.evaluate(dico),self.var2.evaluate(dico))
 
-#la methode evaluate de la classe renvoi l'operation binaire entre les deux variables (var1 et var2).
+#la methode evaluate de la classe renvoi renvoi le boolean ou l'operation binaire entre les deux variables (var1 et var2).
 class booleanExpression:
 
     def __init__(self, var1, opera, var2):
@@ -79,7 +79,10 @@ class booleanExpression:
         '=' : lambda x , y: x==y,
         '!=' : lambda x , y: x!=y,
         }
-        return operator[self.opera](self.var1.evaluate(dico),self.var2.evaluate(dico))
+        if(self.opera is None or self.var2 is None):
+            return self.var1.evaluate(dico)
+        else:
+            return operator[self.opera](self.var1.evaluate(dico),self.var2.evaluate(dico))
 
 #la methode evaluate de la classe renvoi le boolean ou le resultat de l'operation entre les deux boolean (si il y a deux boolean).
 class boolean:
