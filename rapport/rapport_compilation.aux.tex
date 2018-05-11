@@ -1,0 +1,139 @@
+﻿\documentclass{report}
+\usepackage[francais]{babel}
+%\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}  
+\usepackage[T1]{fontenc}
+\usepackage[top = 3cm, left = 2cm, right = 2cm ]{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage{sidecap}
+\usepackage{fancyhdr}
+\usepackage{lscape}
+\usepackage[absolute]{textpos}
+\usepackage{amssymb}
+
+\title{Projet compilation}
+\author{Libert Robin\\ Zielinski Pierre \\ BA3 Info}
+\date{14 mai 2018}
+
+\pagestyle{fancy}
+\lhead{Libert R. Zielinski P.}
+\rhead{BA3 Info}
+\cfoot{\thepage}
+
+\begin{document}
+\maketitle
+
+\section*{ Introduction}
+
+
+\section*{ Description des lexèmes}
+
+\subsection*{INITIAL STATE}
+
+BLOC\_BEGIN $\leftarrow$ \{\{\\
+
+TXT $\leftarrow$ \verb![\w|;|&|<|>|"|_|-|.|\|/|\n|\p|:|,| \t]+!
+
+\subsection*{IN\_STRING\_STATE}
+
+APO $\leftarrow$ \verb!'!\\
+
+STRING $\leftarrow$ \verb![\w|;|&|<|>|"|_|-|.|\|/|\n|\p|:|,| ]+!
+
+\subsection*{IN\_CODE\_STATE}
+
+APO $\leftarrow$ \verb!'!\\
+
+BLOC\_END $\leftarrow$ \}\}\\
+
+FOR $\leftarrow$ for\\
+
+IN $\leftarrow$ in\\
+
+DO $\leftarrow$ do\\
+
+ENDFOR $\leftarrow$ endfor\\
+
+IF $\leftarrow$ if\\
+
+ELSE $\leftarrow$ else\\
+
+ENDIF $\leftarrow$ endif\\
+
+PRINT $\leftarrow$ print\\
+
+INTEGER $\leftarrow$ \verb!\d+!\\
+
+ADD\_OP $\leftarrow$ \verb!+|-!\\
+
+MUL\_OP $\leftarrow$ \verb!*|/!\\
+
+PAR\_FERM $\leftarrow$ \verb!)!\\
+
+PAR\_OUVR $\leftarrow$ \verb!(!\\
+
+DOT\_COMMA $\leftarrow$ \verb!;!\\
+
+DOT $\leftarrow$ \verb!.!\\
+
+ASSIGNEMENT $\leftarrow$ \verb!:=!\\
+
+BOOLEAN $\leftarrow$ true|false\\
+
+VAR $\leftarrow$ \verb![\w]+!\\
+
+OPERATOR $\leftarrow$ \verb!<|>|=|!!=\\
+
+BINOPERATOR $\leftarrow$ or|and\\
+
+
+
+\section*{ Description de la grammaire}
+
+programme $\leftarrow$ TXT | TXT programme\\
+
+programme $\leftarrow$ dumboBloc | dumboBloc programme\\
+
+dumboBloc $\leftarrow$ BLOC\_BEGIN expressionList BLOC\_END\\
+
+expressionList $\leftarrow$ expression DOT\_COMMA | expression DOT\_COMMA expressionList\\
+
+expression $\leftarrow$ variableN ASSIGNEMENT stringExpression | variableN ASSIGNEMENT list\\
+
+expression $\leftarrow$ PRINT stringExpression\\
+
+expression $\leftarrow$ FOR variableN IN list DO expressionList ENDFOR | FOR variableN IN variable DO expressionList ENDFOR\\
+
+expression $\leftarrow$ IF boolean DO expressionList ENDIF | IF boolean DO expressionList ELSE expressionList ENDIF\\
+
+stringExpression $\leftarrow$ integer | string | stringExpression DOT stringExpression\\
+
+list $\leftarrow$ PAR\_OUVR stringListInterior PAR\_FERM | PAR\_OUVR integerListInterior PAR\_FERM\\
+
+stringListInterior $\leftarrow$ string | string COMMA stringListInterior\\
+
+integerListInterior $\leftarrow$ integer | integer COMMA integerListInterior\\
+
+variable $\leftarrow$ VAR\\
+
+variableN $\leftarrow$ VAR\\
+
+string $\leftarrow$ APO STRING APO\\
+
+integer $\leftarrow$ integerVar | variable | integer ADD\_OP integer | integer MUL\_OP integer\\
+
+integerVar $\leftarrow$ INTEGER\\
+
+boolean $\leftarrow$ booleanVar | booleanOP | boolean BINOPERATOR boolean\\
+
+booleanOP $\leftarrow$ integer OPERATOR integer\\
+
+booleanVar $\leftarrow$ BOOLEAN\\
+
+
+\section*{ Gestion du if et du for}
+
+
+\section*{ Difficultés rencontrées }
+
+\end{document}
