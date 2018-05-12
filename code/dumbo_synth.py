@@ -154,5 +154,6 @@ if __name__ == '__main__':
     result1 = yacc.parse(input1)
     dico = result1.evaluate(dico)
     result2 = yacc.parse(input2)
-    result2.evaluate(dico)
-    print(dico['+'])
+    dico = result2.evaluate(dico)
+    with open(sys.argv[3], "w") as fichier:
+        fichier.write(dico['+'])

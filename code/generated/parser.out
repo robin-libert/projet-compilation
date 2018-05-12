@@ -97,37 +97,13 @@ state 0
     (5) dumboBloc -> . BLOC_BEGIN expressionList BLOC_END
     (6) dumboBloc -> . BLOC_BEGIN BLOC_END
 
-    TXT             shift and go to state 1
-    BLOC_BEGIN      shift and go to state 3
+    TXT             shift and go to state 2
+    BLOC_BEGIN      shift and go to state 1
 
     dumboBloc                      shift and go to state 4
-    programme                      shift and go to state 2
+    programme                      shift and go to state 3
 
 state 1
-
-    (1) programme -> TXT .
-    (2) programme -> TXT . programme
-    (1) programme -> . TXT
-    (2) programme -> . TXT programme
-    (3) programme -> . dumboBloc
-    (4) programme -> . dumboBloc programme
-    (5) dumboBloc -> . BLOC_BEGIN expressionList BLOC_END
-    (6) dumboBloc -> . BLOC_BEGIN BLOC_END
-
-    $end            reduce using rule 1 (programme -> TXT .)
-    TXT             shift and go to state 1
-    BLOC_BEGIN      shift and go to state 3
-
-    dumboBloc                      shift and go to state 4
-    programme                      shift and go to state 5
-
-state 2
-
-    (0) S' -> programme .
-
-
-
-state 3
 
     (5) dumboBloc -> BLOC_BEGIN . expressionList BLOC_END
     (6) dumboBloc -> BLOC_BEGIN . BLOC_END
@@ -143,14 +119,38 @@ state 3
     (32) variableN -> . VAR
 
     BLOC_END        shift and go to state 8
-    PRINT           shift and go to state 12
-    FOR             shift and go to state 7
+    PRINT           shift and go to state 10
+    FOR             shift and go to state 11
     IF              shift and go to state 9
-    VAR             shift and go to state 10
+    VAR             shift and go to state 7
 
-    variableN                      shift and go to state 6
-    expressionList                 shift and go to state 13
-    expression                     shift and go to state 11
+    expression                     shift and go to state 5
+    expressionList                 shift and go to state 6
+    variableN                      shift and go to state 12
+
+state 2
+
+    (1) programme -> TXT .
+    (2) programme -> TXT . programme
+    (1) programme -> . TXT
+    (2) programme -> . TXT programme
+    (3) programme -> . dumboBloc
+    (4) programme -> . dumboBloc programme
+    (5) dumboBloc -> . BLOC_BEGIN expressionList BLOC_END
+    (6) dumboBloc -> . BLOC_BEGIN BLOC_END
+
+    $end            reduce using rule 1 (programme -> TXT .)
+    TXT             shift and go to state 2
+    BLOC_BEGIN      shift and go to state 1
+
+    dumboBloc                      shift and go to state 4
+    programme                      shift and go to state 13
+
+state 3
+
+    (0) S' -> programme .
+
+
 
 state 4
 
@@ -164,36 +164,34 @@ state 4
     (6) dumboBloc -> . BLOC_BEGIN BLOC_END
 
     $end            reduce using rule 3 (programme -> dumboBloc .)
-    TXT             shift and go to state 1
-    BLOC_BEGIN      shift and go to state 3
+    TXT             shift and go to state 2
+    BLOC_BEGIN      shift and go to state 1
 
     dumboBloc                      shift and go to state 4
     programme                      shift and go to state 14
 
 state 5
 
-    (2) programme -> TXT programme .
+    (7) expressionList -> expression . DOT_COMMA
+    (8) expressionList -> expression . DOT_COMMA expressionList
 
-    $end            reduce using rule 2 (programme -> TXT programme .)
+    DOT_COMMA       shift and go to state 15
 
 
 state 6
 
-    (9) expression -> variableN . ASSIGNEMENT globalExpression
-    (10) expression -> variableN . ASSIGNEMENT list
+    (5) dumboBloc -> BLOC_BEGIN expressionList . BLOC_END
 
-    ASSIGNEMENT     shift and go to state 15
+    BLOC_END        shift and go to state 16
 
 
 state 7
 
-    (12) expression -> FOR . variableN IN list DO expressionList ENDFOR
-    (13) expression -> FOR . variableN IN variable DO expressionList ENDFOR
-    (32) variableN -> . VAR
+    (32) variableN -> VAR .
 
-    VAR             shift and go to state 10
+    ASSIGNEMENT     reduce using rule 32 (variableN -> VAR .)
+    IN              reduce using rule 32 (variableN -> VAR .)
 
-    variableN                      shift and go to state 16
 
 state 8
 
@@ -222,34 +220,18 @@ state 9
     (31) variable -> . VAR
     (35) booleanVar -> . BOOLEAN
 
-    APO             shift and go to state 19
+    APO             shift and go to state 18
     INTEGER         shift and go to state 20
-    VAR             shift and go to state 25
-    BOOLEAN         shift and go to state 21
+    VAR             shift and go to state 22
+    BOOLEAN         shift and go to state 23
 
-    string                         shift and go to state 17
-    integerVar                     shift and go to state 18
-    booleanVar                     shift and go to state 22
-    globalExpression               shift and go to state 23
-    variable                       shift and go to state 24
+    variable                       shift and go to state 17
+    string                         shift and go to state 21
+    booleanVar                     shift and go to state 24
+    globalExpression               shift and go to state 19
+    integerVar                     shift and go to state 25
 
 state 10
-
-    (32) variableN -> VAR .
-
-    ASSIGNEMENT     reduce using rule 32 (variableN -> VAR .)
-    IN              reduce using rule 32 (variableN -> VAR .)
-
-
-state 11
-
-    (7) expressionList -> expression . DOT_COMMA
-    (8) expressionList -> expression . DOT_COMMA expressionList
-
-    DOT_COMMA       shift and go to state 26
-
-
-state 12
 
     (11) expression -> PRINT . globalExpression
     (16) globalExpression -> . string
@@ -266,22 +248,40 @@ state 12
     (31) variable -> . VAR
     (35) booleanVar -> . BOOLEAN
 
-    APO             shift and go to state 19
+    APO             shift and go to state 18
     INTEGER         shift and go to state 20
-    VAR             shift and go to state 25
-    BOOLEAN         shift and go to state 21
+    VAR             shift and go to state 22
+    BOOLEAN         shift and go to state 23
 
-    globalExpression               shift and go to state 27
-    string                         shift and go to state 17
-    integerVar                     shift and go to state 18
-    variable                       shift and go to state 24
-    booleanVar                     shift and go to state 22
+    booleanVar                     shift and go to state 24
+    globalExpression               shift and go to state 26
+    variable                       shift and go to state 17
+    string                         shift and go to state 21
+    integerVar                     shift and go to state 25
+
+state 11
+
+    (12) expression -> FOR . variableN IN list DO expressionList ENDFOR
+    (13) expression -> FOR . variableN IN variable DO expressionList ENDFOR
+    (32) variableN -> . VAR
+
+    VAR             shift and go to state 7
+
+    variableN                      shift and go to state 27
+
+state 12
+
+    (9) expression -> variableN . ASSIGNEMENT globalExpression
+    (10) expression -> variableN . ASSIGNEMENT list
+
+    ASSIGNEMENT     shift and go to state 28
+
 
 state 13
 
-    (5) dumboBloc -> BLOC_BEGIN expressionList . BLOC_END
+    (2) programme -> TXT programme .
 
-    BLOC_END        shift and go to state 28
+    $end            reduce using rule 2 (programme -> TXT programme .)
 
 
 state 14
@@ -292,6 +292,186 @@ state 14
 
 
 state 15
+
+    (7) expressionList -> expression DOT_COMMA .
+    (8) expressionList -> expression DOT_COMMA . expressionList
+    (7) expressionList -> . expression DOT_COMMA
+    (8) expressionList -> . expression DOT_COMMA expressionList
+    (9) expression -> . variableN ASSIGNEMENT globalExpression
+    (10) expression -> . variableN ASSIGNEMENT list
+    (11) expression -> . PRINT globalExpression
+    (12) expression -> . FOR variableN IN list DO expressionList ENDFOR
+    (13) expression -> . FOR variableN IN variable DO expressionList ENDFOR
+    (14) expression -> . IF globalExpression DO expressionList ENDIF
+    (15) expression -> . IF globalExpression DO expressionList ELSE expressionList ENDIF
+    (32) variableN -> . VAR
+
+    ENDFOR          reduce using rule 7 (expressionList -> expression DOT_COMMA .)
+    BLOC_END        reduce using rule 7 (expressionList -> expression DOT_COMMA .)
+    ENDIF           reduce using rule 7 (expressionList -> expression DOT_COMMA .)
+    ELSE            reduce using rule 7 (expressionList -> expression DOT_COMMA .)
+    PRINT           shift and go to state 10
+    FOR             shift and go to state 11
+    IF              shift and go to state 9
+    VAR             shift and go to state 7
+
+    expression                     shift and go to state 5
+    expressionList                 shift and go to state 29
+    variableN                      shift and go to state 12
+
+state 16
+
+    (5) dumboBloc -> BLOC_BEGIN expressionList BLOC_END .
+
+    TXT             reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
+    BLOC_BEGIN      reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
+    $end            reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
+
+
+state 17
+
+    (18) globalExpression -> variable .
+
+    BINOPERATOR     reduce using rule 18 (globalExpression -> variable .)
+    OPERATOR        reduce using rule 18 (globalExpression -> variable .)
+    ADD_OP          reduce using rule 18 (globalExpression -> variable .)
+    MUL_OP          reduce using rule 18 (globalExpression -> variable .)
+    DOT             reduce using rule 18 (globalExpression -> variable .)
+    DO              reduce using rule 18 (globalExpression -> variable .)
+    DOT_COMMA       reduce using rule 18 (globalExpression -> variable .)
+
+
+state 18
+
+    (33) string -> APO . STRING APO
+
+    STRING          shift and go to state 30
+
+
+state 19
+
+    (14) expression -> IF globalExpression . DO expressionList ENDIF
+    (15) expression -> IF globalExpression . DO expressionList ELSE expressionList ENDIF
+    (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
+    (21) globalExpression -> globalExpression . OPERATOR globalExpression
+    (22) globalExpression -> globalExpression . ADD_OP globalExpression
+    (23) globalExpression -> globalExpression . MUL_OP globalExpression
+    (24) globalExpression -> globalExpression . DOT globalExpression
+
+    DO              shift and go to state 34
+    BINOPERATOR     shift and go to state 35
+    OPERATOR        shift and go to state 32
+    ADD_OP          shift and go to state 36
+    MUL_OP          shift and go to state 33
+    DOT             shift and go to state 31
+
+
+state 20
+
+    (34) integerVar -> INTEGER .
+
+    DO              reduce using rule 34 (integerVar -> INTEGER .)
+    BINOPERATOR     reduce using rule 34 (integerVar -> INTEGER .)
+    OPERATOR        reduce using rule 34 (integerVar -> INTEGER .)
+    ADD_OP          reduce using rule 34 (integerVar -> INTEGER .)
+    MUL_OP          reduce using rule 34 (integerVar -> INTEGER .)
+    DOT             reduce using rule 34 (integerVar -> INTEGER .)
+    DOT_COMMA       reduce using rule 34 (integerVar -> INTEGER .)
+    COMMA           reduce using rule 34 (integerVar -> INTEGER .)
+    PAR_FERM        reduce using rule 34 (integerVar -> INTEGER .)
+
+
+state 21
+
+    (16) globalExpression -> string .
+
+    BINOPERATOR     reduce using rule 16 (globalExpression -> string .)
+    OPERATOR        reduce using rule 16 (globalExpression -> string .)
+    ADD_OP          reduce using rule 16 (globalExpression -> string .)
+    MUL_OP          reduce using rule 16 (globalExpression -> string .)
+    DOT             reduce using rule 16 (globalExpression -> string .)
+    DO              reduce using rule 16 (globalExpression -> string .)
+    DOT_COMMA       reduce using rule 16 (globalExpression -> string .)
+
+
+state 22
+
+    (31) variable -> VAR .
+
+    BINOPERATOR     reduce using rule 31 (variable -> VAR .)
+    OPERATOR        reduce using rule 31 (variable -> VAR .)
+    ADD_OP          reduce using rule 31 (variable -> VAR .)
+    MUL_OP          reduce using rule 31 (variable -> VAR .)
+    DOT             reduce using rule 31 (variable -> VAR .)
+    DO              reduce using rule 31 (variable -> VAR .)
+    DOT_COMMA       reduce using rule 31 (variable -> VAR .)
+
+
+state 23
+
+    (35) booleanVar -> BOOLEAN .
+
+    BINOPERATOR     reduce using rule 35 (booleanVar -> BOOLEAN .)
+    OPERATOR        reduce using rule 35 (booleanVar -> BOOLEAN .)
+    ADD_OP          reduce using rule 35 (booleanVar -> BOOLEAN .)
+    MUL_OP          reduce using rule 35 (booleanVar -> BOOLEAN .)
+    DOT             reduce using rule 35 (booleanVar -> BOOLEAN .)
+    DO              reduce using rule 35 (booleanVar -> BOOLEAN .)
+    DOT_COMMA       reduce using rule 35 (booleanVar -> BOOLEAN .)
+
+
+state 24
+
+    (19) globalExpression -> booleanVar .
+
+    BINOPERATOR     reduce using rule 19 (globalExpression -> booleanVar .)
+    OPERATOR        reduce using rule 19 (globalExpression -> booleanVar .)
+    ADD_OP          reduce using rule 19 (globalExpression -> booleanVar .)
+    MUL_OP          reduce using rule 19 (globalExpression -> booleanVar .)
+    DOT             reduce using rule 19 (globalExpression -> booleanVar .)
+    DO              reduce using rule 19 (globalExpression -> booleanVar .)
+    DOT_COMMA       reduce using rule 19 (globalExpression -> booleanVar .)
+
+
+state 25
+
+    (17) globalExpression -> integerVar .
+
+    BINOPERATOR     reduce using rule 17 (globalExpression -> integerVar .)
+    OPERATOR        reduce using rule 17 (globalExpression -> integerVar .)
+    ADD_OP          reduce using rule 17 (globalExpression -> integerVar .)
+    MUL_OP          reduce using rule 17 (globalExpression -> integerVar .)
+    DOT             reduce using rule 17 (globalExpression -> integerVar .)
+    DO              reduce using rule 17 (globalExpression -> integerVar .)
+    DOT_COMMA       reduce using rule 17 (globalExpression -> integerVar .)
+
+
+state 26
+
+    (11) expression -> PRINT globalExpression .
+    (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
+    (21) globalExpression -> globalExpression . OPERATOR globalExpression
+    (22) globalExpression -> globalExpression . ADD_OP globalExpression
+    (23) globalExpression -> globalExpression . MUL_OP globalExpression
+    (24) globalExpression -> globalExpression . DOT globalExpression
+
+    DOT_COMMA       reduce using rule 11 (expression -> PRINT globalExpression .)
+    BINOPERATOR     shift and go to state 35
+    OPERATOR        shift and go to state 32
+    ADD_OP          shift and go to state 36
+    MUL_OP          shift and go to state 33
+    DOT             shift and go to state 31
+
+
+state 27
+
+    (12) expression -> FOR variableN . IN list DO expressionList ENDFOR
+    (13) expression -> FOR variableN . IN variable DO expressionList ENDFOR
+
+    IN              shift and go to state 37
+
+
+state 28
 
     (9) expression -> variableN ASSIGNEMENT . globalExpression
     (10) expression -> variableN ASSIGNEMENT . list
@@ -311,320 +491,37 @@ state 15
     (31) variable -> . VAR
     (35) booleanVar -> . BOOLEAN
 
-    PAR_OUVR        shift and go to state 30
-    APO             shift and go to state 19
+    PAR_OUVR        shift and go to state 38
+    APO             shift and go to state 18
     INTEGER         shift and go to state 20
-    VAR             shift and go to state 25
-    BOOLEAN         shift and go to state 21
+    VAR             shift and go to state 22
+    BOOLEAN         shift and go to state 23
 
-    list                           shift and go to state 31
-    string                         shift and go to state 17
-    globalExpression               shift and go to state 29
-    integerVar                     shift and go to state 18
-    booleanVar                     shift and go to state 22
-    variable                       shift and go to state 24
-
-state 16
-
-    (12) expression -> FOR variableN . IN list DO expressionList ENDFOR
-    (13) expression -> FOR variableN . IN variable DO expressionList ENDFOR
-
-    IN              shift and go to state 32
-
-
-state 17
-
-    (16) globalExpression -> string .
-
-    BINOPERATOR     reduce using rule 16 (globalExpression -> string .)
-    OPERATOR        reduce using rule 16 (globalExpression -> string .)
-    ADD_OP          reduce using rule 16 (globalExpression -> string .)
-    MUL_OP          reduce using rule 16 (globalExpression -> string .)
-    DOT             reduce using rule 16 (globalExpression -> string .)
-    DOT_COMMA       reduce using rule 16 (globalExpression -> string .)
-    DO              reduce using rule 16 (globalExpression -> string .)
-
-
-state 18
-
-    (17) globalExpression -> integerVar .
-
-    BINOPERATOR     reduce using rule 17 (globalExpression -> integerVar .)
-    OPERATOR        reduce using rule 17 (globalExpression -> integerVar .)
-    ADD_OP          reduce using rule 17 (globalExpression -> integerVar .)
-    MUL_OP          reduce using rule 17 (globalExpression -> integerVar .)
-    DOT             reduce using rule 17 (globalExpression -> integerVar .)
-    DOT_COMMA       reduce using rule 17 (globalExpression -> integerVar .)
-    DO              reduce using rule 17 (globalExpression -> integerVar .)
-
-
-state 19
-
-    (33) string -> APO . STRING APO
-
-    STRING          shift and go to state 33
-
-
-state 20
-
-    (34) integerVar -> INTEGER .
-
-    COMMA           reduce using rule 34 (integerVar -> INTEGER .)
-    PAR_FERM        reduce using rule 34 (integerVar -> INTEGER .)
-    BINOPERATOR     reduce using rule 34 (integerVar -> INTEGER .)
-    OPERATOR        reduce using rule 34 (integerVar -> INTEGER .)
-    ADD_OP          reduce using rule 34 (integerVar -> INTEGER .)
-    MUL_OP          reduce using rule 34 (integerVar -> INTEGER .)
-    DOT             reduce using rule 34 (integerVar -> INTEGER .)
-    DOT_COMMA       reduce using rule 34 (integerVar -> INTEGER .)
-    DO              reduce using rule 34 (integerVar -> INTEGER .)
-
-
-state 21
-
-    (35) booleanVar -> BOOLEAN .
-
-    BINOPERATOR     reduce using rule 35 (booleanVar -> BOOLEAN .)
-    OPERATOR        reduce using rule 35 (booleanVar -> BOOLEAN .)
-    ADD_OP          reduce using rule 35 (booleanVar -> BOOLEAN .)
-    MUL_OP          reduce using rule 35 (booleanVar -> BOOLEAN .)
-    DOT             reduce using rule 35 (booleanVar -> BOOLEAN .)
-    DOT_COMMA       reduce using rule 35 (booleanVar -> BOOLEAN .)
-    DO              reduce using rule 35 (booleanVar -> BOOLEAN .)
-
-
-state 22
-
-    (19) globalExpression -> booleanVar .
-
-    BINOPERATOR     reduce using rule 19 (globalExpression -> booleanVar .)
-    OPERATOR        reduce using rule 19 (globalExpression -> booleanVar .)
-    ADD_OP          reduce using rule 19 (globalExpression -> booleanVar .)
-    MUL_OP          reduce using rule 19 (globalExpression -> booleanVar .)
-    DOT             reduce using rule 19 (globalExpression -> booleanVar .)
-    DOT_COMMA       reduce using rule 19 (globalExpression -> booleanVar .)
-    DO              reduce using rule 19 (globalExpression -> booleanVar .)
-
-
-state 23
-
-    (14) expression -> IF globalExpression . DO expressionList ENDIF
-    (15) expression -> IF globalExpression . DO expressionList ELSE expressionList ENDIF
-    (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
-    (21) globalExpression -> globalExpression . OPERATOR globalExpression
-    (22) globalExpression -> globalExpression . ADD_OP globalExpression
-    (23) globalExpression -> globalExpression . MUL_OP globalExpression
-    (24) globalExpression -> globalExpression . DOT globalExpression
-
-    DO              shift and go to state 37
-    BINOPERATOR     shift and go to state 34
-    OPERATOR        shift and go to state 38
-    ADD_OP          shift and go to state 35
-    MUL_OP          shift and go to state 39
-    DOT             shift and go to state 36
-
-
-state 24
-
-    (18) globalExpression -> variable .
-
-    BINOPERATOR     reduce using rule 18 (globalExpression -> variable .)
-    OPERATOR        reduce using rule 18 (globalExpression -> variable .)
-    ADD_OP          reduce using rule 18 (globalExpression -> variable .)
-    MUL_OP          reduce using rule 18 (globalExpression -> variable .)
-    DOT             reduce using rule 18 (globalExpression -> variable .)
-    DOT_COMMA       reduce using rule 18 (globalExpression -> variable .)
-    DO              reduce using rule 18 (globalExpression -> variable .)
-
-
-state 25
-
-    (31) variable -> VAR .
-
-    BINOPERATOR     reduce using rule 31 (variable -> VAR .)
-    OPERATOR        reduce using rule 31 (variable -> VAR .)
-    ADD_OP          reduce using rule 31 (variable -> VAR .)
-    MUL_OP          reduce using rule 31 (variable -> VAR .)
-    DOT             reduce using rule 31 (variable -> VAR .)
-    DO              reduce using rule 31 (variable -> VAR .)
-    DOT_COMMA       reduce using rule 31 (variable -> VAR .)
-
-
-state 26
-
-    (7) expressionList -> expression DOT_COMMA .
-    (8) expressionList -> expression DOT_COMMA . expressionList
-    (7) expressionList -> . expression DOT_COMMA
-    (8) expressionList -> . expression DOT_COMMA expressionList
-    (9) expression -> . variableN ASSIGNEMENT globalExpression
-    (10) expression -> . variableN ASSIGNEMENT list
-    (11) expression -> . PRINT globalExpression
-    (12) expression -> . FOR variableN IN list DO expressionList ENDFOR
-    (13) expression -> . FOR variableN IN variable DO expressionList ENDFOR
-    (14) expression -> . IF globalExpression DO expressionList ENDIF
-    (15) expression -> . IF globalExpression DO expressionList ELSE expressionList ENDIF
-    (32) variableN -> . VAR
-
-    ENDFOR          reduce using rule 7 (expressionList -> expression DOT_COMMA .)
-    ENDIF           reduce using rule 7 (expressionList -> expression DOT_COMMA .)
-    ELSE            reduce using rule 7 (expressionList -> expression DOT_COMMA .)
-    BLOC_END        reduce using rule 7 (expressionList -> expression DOT_COMMA .)
-    PRINT           shift and go to state 12
-    FOR             shift and go to state 7
-    IF              shift and go to state 9
-    VAR             shift and go to state 10
-
-    variableN                      shift and go to state 6
-    expression                     shift and go to state 11
-    expressionList                 shift and go to state 40
-
-state 27
-
-    (11) expression -> PRINT globalExpression .
-    (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
-    (21) globalExpression -> globalExpression . OPERATOR globalExpression
-    (22) globalExpression -> globalExpression . ADD_OP globalExpression
-    (23) globalExpression -> globalExpression . MUL_OP globalExpression
-    (24) globalExpression -> globalExpression . DOT globalExpression
-
-    DOT_COMMA       reduce using rule 11 (expression -> PRINT globalExpression .)
-    BINOPERATOR     shift and go to state 34
-    OPERATOR        shift and go to state 38
-    ADD_OP          shift and go to state 35
-    MUL_OP          shift and go to state 39
-    DOT             shift and go to state 36
-
-
-state 28
-
-    (5) dumboBloc -> BLOC_BEGIN expressionList BLOC_END .
-
-    TXT             reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
-    BLOC_BEGIN      reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
-    $end            reduce using rule 5 (dumboBloc -> BLOC_BEGIN expressionList BLOC_END .)
-
+    list                           shift and go to state 40
+    variable                       shift and go to state 17
+    string                         shift and go to state 21
+    booleanVar                     shift and go to state 24
+    globalExpression               shift and go to state 39
+    integerVar                     shift and go to state 25
 
 state 29
 
-    (9) expression -> variableN ASSIGNEMENT globalExpression .
-    (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
-    (21) globalExpression -> globalExpression . OPERATOR globalExpression
-    (22) globalExpression -> globalExpression . ADD_OP globalExpression
-    (23) globalExpression -> globalExpression . MUL_OP globalExpression
-    (24) globalExpression -> globalExpression . DOT globalExpression
+    (8) expressionList -> expression DOT_COMMA expressionList .
 
-    DOT_COMMA       reduce using rule 9 (expression -> variableN ASSIGNEMENT globalExpression .)
-    BINOPERATOR     shift and go to state 34
-    OPERATOR        shift and go to state 38
-    ADD_OP          shift and go to state 35
-    MUL_OP          shift and go to state 39
-    DOT             shift and go to state 36
+    ENDFOR          reduce using rule 8 (expressionList -> expression DOT_COMMA expressionList .)
+    BLOC_END        reduce using rule 8 (expressionList -> expression DOT_COMMA expressionList .)
+    ENDIF           reduce using rule 8 (expressionList -> expression DOT_COMMA expressionList .)
+    ELSE            reduce using rule 8 (expressionList -> expression DOT_COMMA expressionList .)
 
 
 state 30
 
-    (25) list -> PAR_OUVR . stringListInterior PAR_FERM
-    (26) list -> PAR_OUVR . integerListInterior PAR_FERM
-    (27) stringListInterior -> . string
-    (28) stringListInterior -> . string COMMA stringListInterior
-    (29) integerListInterior -> . integerVar
-    (30) integerListInterior -> . integerVar COMMA integerListInterior
-    (33) string -> . APO STRING APO
-    (34) integerVar -> . INTEGER
-
-    APO             shift and go to state 19
-    INTEGER         shift and go to state 20
-
-    string                         shift and go to state 43
-    integerListInterior            shift and go to state 44
-    integerVar                     shift and go to state 41
-    stringListInterior             shift and go to state 42
-
-state 31
-
-    (10) expression -> variableN ASSIGNEMENT list .
-
-    DOT_COMMA       reduce using rule 10 (expression -> variableN ASSIGNEMENT list .)
-
-
-state 32
-
-    (12) expression -> FOR variableN IN . list DO expressionList ENDFOR
-    (13) expression -> FOR variableN IN . variable DO expressionList ENDFOR
-    (25) list -> . PAR_OUVR stringListInterior PAR_FERM
-    (26) list -> . PAR_OUVR integerListInterior PAR_FERM
-    (31) variable -> . VAR
-
-    PAR_OUVR        shift and go to state 30
-    VAR             shift and go to state 25
-
-    list                           shift and go to state 45
-    variable                       shift and go to state 46
-
-state 33
-
     (33) string -> APO STRING . APO
 
-    APO             shift and go to state 47
+    APO             shift and go to state 41
 
 
-state 34
-
-    (20) globalExpression -> globalExpression BINOPERATOR . globalExpression
-    (16) globalExpression -> . string
-    (17) globalExpression -> . integerVar
-    (18) globalExpression -> . variable
-    (19) globalExpression -> . booleanVar
-    (20) globalExpression -> . globalExpression BINOPERATOR globalExpression
-    (21) globalExpression -> . globalExpression OPERATOR globalExpression
-    (22) globalExpression -> . globalExpression ADD_OP globalExpression
-    (23) globalExpression -> . globalExpression MUL_OP globalExpression
-    (24) globalExpression -> . globalExpression DOT globalExpression
-    (33) string -> . APO STRING APO
-    (34) integerVar -> . INTEGER
-    (31) variable -> . VAR
-    (35) booleanVar -> . BOOLEAN
-
-    APO             shift and go to state 19
-    INTEGER         shift and go to state 20
-    VAR             shift and go to state 25
-    BOOLEAN         shift and go to state 21
-
-    globalExpression               shift and go to state 48
-    string                         shift and go to state 17
-    integerVar                     shift and go to state 18
-    variable                       shift and go to state 24
-    booleanVar                     shift and go to state 22
-
-state 35
-
-    (22) globalExpression -> globalExpression ADD_OP . globalExpression
-    (16) globalExpression -> . string
-    (17) globalExpression -> . integerVar
-    (18) globalExpression -> . variable
-    (19) globalExpression -> . booleanVar
-    (20) globalExpression -> . globalExpression BINOPERATOR globalExpression
-    (21) globalExpression -> . globalExpression OPERATOR globalExpression
-    (22) globalExpression -> . globalExpression ADD_OP globalExpression
-    (23) globalExpression -> . globalExpression MUL_OP globalExpression
-    (24) globalExpression -> . globalExpression DOT globalExpression
-    (33) string -> . APO STRING APO
-    (34) integerVar -> . INTEGER
-    (31) variable -> . VAR
-    (35) booleanVar -> . BOOLEAN
-
-    APO             shift and go to state 19
-    INTEGER         shift and go to state 20
-    VAR             shift and go to state 25
-    BOOLEAN         shift and go to state 21
-
-    globalExpression               shift and go to state 49
-    string                         shift and go to state 17
-    integerVar                     shift and go to state 18
-    variable                       shift and go to state 24
-    booleanVar                     shift and go to state 22
-
-state 36
+state 31
 
     (24) globalExpression -> globalExpression DOT . globalExpression
     (16) globalExpression -> . string
@@ -641,42 +538,18 @@ state 36
     (31) variable -> . VAR
     (35) booleanVar -> . BOOLEAN
 
-    APO             shift and go to state 19
+    APO             shift and go to state 18
     INTEGER         shift and go to state 20
-    VAR             shift and go to state 25
-    BOOLEAN         shift and go to state 21
+    VAR             shift and go to state 22
+    BOOLEAN         shift and go to state 23
 
-    globalExpression               shift and go to state 50
-    string                         shift and go to state 17
-    integerVar                     shift and go to state 18
-    variable                       shift and go to state 24
-    booleanVar                     shift and go to state 22
+    booleanVar                     shift and go to state 24
+    globalExpression               shift and go to state 42
+    variable                       shift and go to state 17
+    string                         shift and go to state 21
+    integerVar                     shift and go to state 25
 
-state 37
-
-    (14) expression -> IF globalExpression DO . expressionList ENDIF
-    (15) expression -> IF globalExpression DO . expressionList ELSE expressionList ENDIF
-    (7) expressionList -> . expression DOT_COMMA
-    (8) expressionList -> . expression DOT_COMMA expressionList
-    (9) expression -> . variableN ASSIGNEMENT globalExpression
-    (10) expression -> . variableN ASSIGNEMENT list
-    (11) expression -> . PRINT globalExpression
-    (12) expression -> . FOR variableN IN list DO expressionList ENDFOR
-    (13) expression -> . FOR variableN IN variable DO expressionList ENDFOR
-    (14) expression -> . IF globalExpression DO expressionList ENDIF
-    (15) expression -> . IF globalExpression DO expressionList ELSE expressionList ENDIF
-    (32) variableN -> . VAR
-
-    PRINT           shift and go to state 12
-    FOR             shift and go to state 7
-    IF              shift and go to state 9
-    VAR             shift and go to state 10
-
-    variableN                      shift and go to state 6
-    expressionList                 shift and go to state 51
-    expression                     shift and go to state 11
-
-state 38
+state 32
 
     (21) globalExpression -> globalExpression OPERATOR . globalExpression
     (16) globalExpression -> . string
@@ -693,18 +566,18 @@ state 38
     (31) variable -> . VAR
     (35) booleanVar -> . BOOLEAN
 
-    APO             shift and go to state 19
+    APO             shift and go to state 18
     INTEGER         shift and go to state 20
-    VAR             shift and go to state 25
-    BOOLEAN         shift and go to state 21
+    VAR             shift and go to state 22
+    BOOLEAN         shift and go to state 23
 
-    globalExpression               shift and go to state 52
-    string                         shift and go to state 17
-    integerVar                     shift and go to state 18
-    variable                       shift and go to state 24
-    booleanVar                     shift and go to state 22
+    booleanVar                     shift and go to state 24
+    globalExpression               shift and go to state 43
+    variable                       shift and go to state 17
+    string                         shift and go to state 21
+    integerVar                     shift and go to state 25
 
-state 39
+state 33
 
     (23) globalExpression -> globalExpression MUL_OP . globalExpression
     (16) globalExpression -> . string
@@ -721,137 +594,170 @@ state 39
     (31) variable -> . VAR
     (35) booleanVar -> . BOOLEAN
 
-    APO             shift and go to state 19
+    APO             shift and go to state 18
     INTEGER         shift and go to state 20
-    VAR             shift and go to state 25
-    BOOLEAN         shift and go to state 21
+    VAR             shift and go to state 22
+    BOOLEAN         shift and go to state 23
 
-    globalExpression               shift and go to state 53
-    string                         shift and go to state 17
-    integerVar                     shift and go to state 18
-    variable                       shift and go to state 24
-    booleanVar                     shift and go to state 22
+    booleanVar                     shift and go to state 24
+    globalExpression               shift and go to state 44
+    variable                       shift and go to state 17
+    string                         shift and go to state 21
+    integerVar                     shift and go to state 25
+
+state 34
+
+    (14) expression -> IF globalExpression DO . expressionList ENDIF
+    (15) expression -> IF globalExpression DO . expressionList ELSE expressionList ENDIF
+    (7) expressionList -> . expression DOT_COMMA
+    (8) expressionList -> . expression DOT_COMMA expressionList
+    (9) expression -> . variableN ASSIGNEMENT globalExpression
+    (10) expression -> . variableN ASSIGNEMENT list
+    (11) expression -> . PRINT globalExpression
+    (12) expression -> . FOR variableN IN list DO expressionList ENDFOR
+    (13) expression -> . FOR variableN IN variable DO expressionList ENDFOR
+    (14) expression -> . IF globalExpression DO expressionList ENDIF
+    (15) expression -> . IF globalExpression DO expressionList ELSE expressionList ENDIF
+    (32) variableN -> . VAR
+
+    PRINT           shift and go to state 10
+    FOR             shift and go to state 11
+    IF              shift and go to state 9
+    VAR             shift and go to state 7
+
+    expression                     shift and go to state 5
+    expressionList                 shift and go to state 45
+    variableN                      shift and go to state 12
+
+state 35
+
+    (20) globalExpression -> globalExpression BINOPERATOR . globalExpression
+    (16) globalExpression -> . string
+    (17) globalExpression -> . integerVar
+    (18) globalExpression -> . variable
+    (19) globalExpression -> . booleanVar
+    (20) globalExpression -> . globalExpression BINOPERATOR globalExpression
+    (21) globalExpression -> . globalExpression OPERATOR globalExpression
+    (22) globalExpression -> . globalExpression ADD_OP globalExpression
+    (23) globalExpression -> . globalExpression MUL_OP globalExpression
+    (24) globalExpression -> . globalExpression DOT globalExpression
+    (33) string -> . APO STRING APO
+    (34) integerVar -> . INTEGER
+    (31) variable -> . VAR
+    (35) booleanVar -> . BOOLEAN
+
+    APO             shift and go to state 18
+    INTEGER         shift and go to state 20
+    VAR             shift and go to state 22
+    BOOLEAN         shift and go to state 23
+
+    booleanVar                     shift and go to state 24
+    globalExpression               shift and go to state 46
+    variable                       shift and go to state 17
+    string                         shift and go to state 21
+    integerVar                     shift and go to state 25
+
+state 36
+
+    (22) globalExpression -> globalExpression ADD_OP . globalExpression
+    (16) globalExpression -> . string
+    (17) globalExpression -> . integerVar
+    (18) globalExpression -> . variable
+    (19) globalExpression -> . booleanVar
+    (20) globalExpression -> . globalExpression BINOPERATOR globalExpression
+    (21) globalExpression -> . globalExpression OPERATOR globalExpression
+    (22) globalExpression -> . globalExpression ADD_OP globalExpression
+    (23) globalExpression -> . globalExpression MUL_OP globalExpression
+    (24) globalExpression -> . globalExpression DOT globalExpression
+    (33) string -> . APO STRING APO
+    (34) integerVar -> . INTEGER
+    (31) variable -> . VAR
+    (35) booleanVar -> . BOOLEAN
+
+    APO             shift and go to state 18
+    INTEGER         shift and go to state 20
+    VAR             shift and go to state 22
+    BOOLEAN         shift and go to state 23
+
+    booleanVar                     shift and go to state 24
+    globalExpression               shift and go to state 47
+    variable                       shift and go to state 17
+    string                         shift and go to state 21
+    integerVar                     shift and go to state 25
+
+state 37
+
+    (12) expression -> FOR variableN IN . list DO expressionList ENDFOR
+    (13) expression -> FOR variableN IN . variable DO expressionList ENDFOR
+    (25) list -> . PAR_OUVR stringListInterior PAR_FERM
+    (26) list -> . PAR_OUVR integerListInterior PAR_FERM
+    (31) variable -> . VAR
+
+    PAR_OUVR        shift and go to state 38
+    VAR             shift and go to state 22
+
+    list                           shift and go to state 49
+    variable                       shift and go to state 48
+
+state 38
+
+    (25) list -> PAR_OUVR . stringListInterior PAR_FERM
+    (26) list -> PAR_OUVR . integerListInterior PAR_FERM
+    (27) stringListInterior -> . string
+    (28) stringListInterior -> . string COMMA stringListInterior
+    (29) integerListInterior -> . integerVar
+    (30) integerListInterior -> . integerVar COMMA integerListInterior
+    (33) string -> . APO STRING APO
+    (34) integerVar -> . INTEGER
+
+    APO             shift and go to state 18
+    INTEGER         shift and go to state 20
+
+    integerVar                     shift and go to state 52
+    stringListInterior             shift and go to state 50
+    integerListInterior            shift and go to state 53
+    string                         shift and go to state 51
+
+state 39
+
+    (9) expression -> variableN ASSIGNEMENT globalExpression .
+    (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
+    (21) globalExpression -> globalExpression . OPERATOR globalExpression
+    (22) globalExpression -> globalExpression . ADD_OP globalExpression
+    (23) globalExpression -> globalExpression . MUL_OP globalExpression
+    (24) globalExpression -> globalExpression . DOT globalExpression
+
+    DOT_COMMA       reduce using rule 9 (expression -> variableN ASSIGNEMENT globalExpression .)
+    BINOPERATOR     shift and go to state 35
+    OPERATOR        shift and go to state 32
+    ADD_OP          shift and go to state 36
+    MUL_OP          shift and go to state 33
+    DOT             shift and go to state 31
+
 
 state 40
 
-    (8) expressionList -> expression DOT_COMMA expressionList .
+    (10) expression -> variableN ASSIGNEMENT list .
 
-    ENDFOR          reduce using rule 8 (expressionList -> expression DOT_COMMA expressionList .)
-    ENDIF           reduce using rule 8 (expressionList -> expression DOT_COMMA expressionList .)
-    ELSE            reduce using rule 8 (expressionList -> expression DOT_COMMA expressionList .)
-    BLOC_END        reduce using rule 8 (expressionList -> expression DOT_COMMA expressionList .)
+    DOT_COMMA       reduce using rule 10 (expression -> variableN ASSIGNEMENT list .)
 
 
 state 41
 
-    (29) integerListInterior -> integerVar .
-    (30) integerListInterior -> integerVar . COMMA integerListInterior
-
-    PAR_FERM        reduce using rule 29 (integerListInterior -> integerVar .)
-    COMMA           shift and go to state 54
-
-
-state 42
-
-    (25) list -> PAR_OUVR stringListInterior . PAR_FERM
-
-    PAR_FERM        shift and go to state 55
-
-
-state 43
-
-    (27) stringListInterior -> string .
-    (28) stringListInterior -> string . COMMA stringListInterior
-
-    PAR_FERM        reduce using rule 27 (stringListInterior -> string .)
-    COMMA           shift and go to state 56
-
-
-state 44
-
-    (26) list -> PAR_OUVR integerListInterior . PAR_FERM
-
-    PAR_FERM        shift and go to state 57
-
-
-state 45
-
-    (12) expression -> FOR variableN IN list . DO expressionList ENDFOR
-
-    DO              shift and go to state 58
-
-
-state 46
-
-    (13) expression -> FOR variableN IN variable . DO expressionList ENDFOR
-
-    DO              shift and go to state 59
-
-
-state 47
-
     (33) string -> APO STRING APO .
 
-    COMMA           reduce using rule 33 (string -> APO STRING APO .)
-    PAR_FERM        reduce using rule 33 (string -> APO STRING APO .)
     BINOPERATOR     reduce using rule 33 (string -> APO STRING APO .)
     OPERATOR        reduce using rule 33 (string -> APO STRING APO .)
     ADD_OP          reduce using rule 33 (string -> APO STRING APO .)
     MUL_OP          reduce using rule 33 (string -> APO STRING APO .)
     DOT             reduce using rule 33 (string -> APO STRING APO .)
-    DOT_COMMA       reduce using rule 33 (string -> APO STRING APO .)
     DO              reduce using rule 33 (string -> APO STRING APO .)
+    DOT_COMMA       reduce using rule 33 (string -> APO STRING APO .)
+    COMMA           reduce using rule 33 (string -> APO STRING APO .)
+    PAR_FERM        reduce using rule 33 (string -> APO STRING APO .)
 
 
-state 48
-
-    (20) globalExpression -> globalExpression BINOPERATOR globalExpression .
-    (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
-    (21) globalExpression -> globalExpression . OPERATOR globalExpression
-    (22) globalExpression -> globalExpression . ADD_OP globalExpression
-    (23) globalExpression -> globalExpression . MUL_OP globalExpression
-    (24) globalExpression -> globalExpression . DOT globalExpression
-
-    BINOPERATOR     reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .)
-    ADD_OP          reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .)
-    MUL_OP          reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .)
-    DOT             reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .)
-    DOT_COMMA       reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .)
-    DO              reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .)
-    OPERATOR        shift and go to state 38
-
-  ! OPERATOR        [ reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .) ]
-  ! BINOPERATOR     [ shift and go to state 34 ]
-  ! ADD_OP          [ shift and go to state 35 ]
-  ! MUL_OP          [ shift and go to state 39 ]
-  ! DOT             [ shift and go to state 36 ]
-
-
-state 49
-
-    (22) globalExpression -> globalExpression ADD_OP globalExpression .
-    (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
-    (21) globalExpression -> globalExpression . OPERATOR globalExpression
-    (22) globalExpression -> globalExpression . ADD_OP globalExpression
-    (23) globalExpression -> globalExpression . MUL_OP globalExpression
-    (24) globalExpression -> globalExpression . DOT globalExpression
-
-    ADD_OP          reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .)
-    DOT             reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .)
-    DOT_COMMA       reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .)
-    DO              reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .)
-    BINOPERATOR     shift and go to state 34
-    OPERATOR        shift and go to state 38
-    MUL_OP          shift and go to state 39
-
-  ! BINOPERATOR     [ reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .) ]
-  ! OPERATOR        [ reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .) ]
-  ! MUL_OP          [ reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .) ]
-  ! ADD_OP          [ shift and go to state 35 ]
-  ! DOT             [ shift and go to state 36 ]
-
-
-state 50
+state 42
 
     (24) globalExpression -> globalExpression DOT globalExpression .
     (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
@@ -861,30 +767,21 @@ state 50
     (24) globalExpression -> globalExpression . DOT globalExpression
 
     DOT             reduce using rule 24 (globalExpression -> globalExpression DOT globalExpression .)
-    DOT_COMMA       reduce using rule 24 (globalExpression -> globalExpression DOT globalExpression .)
     DO              reduce using rule 24 (globalExpression -> globalExpression DOT globalExpression .)
-    BINOPERATOR     shift and go to state 34
-    OPERATOR        shift and go to state 38
-    ADD_OP          shift and go to state 35
-    MUL_OP          shift and go to state 39
+    DOT_COMMA       reduce using rule 24 (globalExpression -> globalExpression DOT globalExpression .)
+    BINOPERATOR     shift and go to state 35
+    OPERATOR        shift and go to state 32
+    ADD_OP          shift and go to state 36
+    MUL_OP          shift and go to state 33
 
   ! BINOPERATOR     [ reduce using rule 24 (globalExpression -> globalExpression DOT globalExpression .) ]
   ! OPERATOR        [ reduce using rule 24 (globalExpression -> globalExpression DOT globalExpression .) ]
   ! ADD_OP          [ reduce using rule 24 (globalExpression -> globalExpression DOT globalExpression .) ]
   ! MUL_OP          [ reduce using rule 24 (globalExpression -> globalExpression DOT globalExpression .) ]
-  ! DOT             [ shift and go to state 36 ]
+  ! DOT             [ shift and go to state 31 ]
 
 
-state 51
-
-    (14) expression -> IF globalExpression DO expressionList . ENDIF
-    (15) expression -> IF globalExpression DO expressionList . ELSE expressionList ENDIF
-
-    ENDIF           shift and go to state 60
-    ELSE            shift and go to state 61
-
-
-state 52
+state 43
 
     (21) globalExpression -> globalExpression OPERATOR globalExpression .
     (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
@@ -898,17 +795,17 @@ state 52
     ADD_OP          reduce using rule 21 (globalExpression -> globalExpression OPERATOR globalExpression .)
     MUL_OP          reduce using rule 21 (globalExpression -> globalExpression OPERATOR globalExpression .)
     DOT             reduce using rule 21 (globalExpression -> globalExpression OPERATOR globalExpression .)
-    DOT_COMMA       reduce using rule 21 (globalExpression -> globalExpression OPERATOR globalExpression .)
     DO              reduce using rule 21 (globalExpression -> globalExpression OPERATOR globalExpression .)
+    DOT_COMMA       reduce using rule 21 (globalExpression -> globalExpression OPERATOR globalExpression .)
 
-  ! BINOPERATOR     [ shift and go to state 34 ]
-  ! OPERATOR        [ shift and go to state 38 ]
-  ! ADD_OP          [ shift and go to state 35 ]
-  ! MUL_OP          [ shift and go to state 39 ]
-  ! DOT             [ shift and go to state 36 ]
+  ! BINOPERATOR     [ shift and go to state 35 ]
+  ! OPERATOR        [ shift and go to state 32 ]
+  ! ADD_OP          [ shift and go to state 36 ]
+  ! MUL_OP          [ shift and go to state 33 ]
+  ! DOT             [ shift and go to state 31 ]
 
 
-state 53
+state 44
 
     (23) globalExpression -> globalExpression MUL_OP globalExpression .
     (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
@@ -920,112 +817,129 @@ state 53
     ADD_OP          reduce using rule 23 (globalExpression -> globalExpression MUL_OP globalExpression .)
     MUL_OP          reduce using rule 23 (globalExpression -> globalExpression MUL_OP globalExpression .)
     DOT             reduce using rule 23 (globalExpression -> globalExpression MUL_OP globalExpression .)
-    DOT_COMMA       reduce using rule 23 (globalExpression -> globalExpression MUL_OP globalExpression .)
     DO              reduce using rule 23 (globalExpression -> globalExpression MUL_OP globalExpression .)
-    BINOPERATOR     shift and go to state 34
-    OPERATOR        shift and go to state 38
+    DOT_COMMA       reduce using rule 23 (globalExpression -> globalExpression MUL_OP globalExpression .)
+    BINOPERATOR     shift and go to state 35
+    OPERATOR        shift and go to state 32
 
   ! BINOPERATOR     [ reduce using rule 23 (globalExpression -> globalExpression MUL_OP globalExpression .) ]
   ! OPERATOR        [ reduce using rule 23 (globalExpression -> globalExpression MUL_OP globalExpression .) ]
-  ! ADD_OP          [ shift and go to state 35 ]
-  ! MUL_OP          [ shift and go to state 39 ]
-  ! DOT             [ shift and go to state 36 ]
+  ! ADD_OP          [ shift and go to state 36 ]
+  ! MUL_OP          [ shift and go to state 33 ]
+  ! DOT             [ shift and go to state 31 ]
+
+
+state 45
+
+    (14) expression -> IF globalExpression DO expressionList . ENDIF
+    (15) expression -> IF globalExpression DO expressionList . ELSE expressionList ENDIF
+
+    ENDIF           shift and go to state 54
+    ELSE            shift and go to state 55
+
+
+state 46
+
+    (20) globalExpression -> globalExpression BINOPERATOR globalExpression .
+    (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
+    (21) globalExpression -> globalExpression . OPERATOR globalExpression
+    (22) globalExpression -> globalExpression . ADD_OP globalExpression
+    (23) globalExpression -> globalExpression . MUL_OP globalExpression
+    (24) globalExpression -> globalExpression . DOT globalExpression
+
+    BINOPERATOR     reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .)
+    ADD_OP          reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .)
+    MUL_OP          reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .)
+    DOT             reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .)
+    DO              reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .)
+    DOT_COMMA       reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .)
+    OPERATOR        shift and go to state 32
+
+  ! OPERATOR        [ reduce using rule 20 (globalExpression -> globalExpression BINOPERATOR globalExpression .) ]
+  ! BINOPERATOR     [ shift and go to state 35 ]
+  ! ADD_OP          [ shift and go to state 36 ]
+  ! MUL_OP          [ shift and go to state 33 ]
+  ! DOT             [ shift and go to state 31 ]
+
+
+state 47
+
+    (22) globalExpression -> globalExpression ADD_OP globalExpression .
+    (20) globalExpression -> globalExpression . BINOPERATOR globalExpression
+    (21) globalExpression -> globalExpression . OPERATOR globalExpression
+    (22) globalExpression -> globalExpression . ADD_OP globalExpression
+    (23) globalExpression -> globalExpression . MUL_OP globalExpression
+    (24) globalExpression -> globalExpression . DOT globalExpression
+
+    ADD_OP          reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .)
+    DOT             reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .)
+    DO              reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .)
+    DOT_COMMA       reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .)
+    BINOPERATOR     shift and go to state 35
+    OPERATOR        shift and go to state 32
+    MUL_OP          shift and go to state 33
+
+  ! BINOPERATOR     [ reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .) ]
+  ! OPERATOR        [ reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .) ]
+  ! MUL_OP          [ reduce using rule 22 (globalExpression -> globalExpression ADD_OP globalExpression .) ]
+  ! ADD_OP          [ shift and go to state 36 ]
+  ! DOT             [ shift and go to state 31 ]
+
+
+state 48
+
+    (13) expression -> FOR variableN IN variable . DO expressionList ENDFOR
+
+    DO              shift and go to state 56
+
+
+state 49
+
+    (12) expression -> FOR variableN IN list . DO expressionList ENDFOR
+
+    DO              shift and go to state 57
+
+
+state 50
+
+    (25) list -> PAR_OUVR stringListInterior . PAR_FERM
+
+    PAR_FERM        shift and go to state 58
+
+
+state 51
+
+    (27) stringListInterior -> string .
+    (28) stringListInterior -> string . COMMA stringListInterior
+
+    PAR_FERM        reduce using rule 27 (stringListInterior -> string .)
+    COMMA           shift and go to state 59
+
+
+state 52
+
+    (29) integerListInterior -> integerVar .
+    (30) integerListInterior -> integerVar . COMMA integerListInterior
+
+    PAR_FERM        reduce using rule 29 (integerListInterior -> integerVar .)
+    COMMA           shift and go to state 60
+
+
+state 53
+
+    (26) list -> PAR_OUVR integerListInterior . PAR_FERM
+
+    PAR_FERM        shift and go to state 61
 
 
 state 54
-
-    (30) integerListInterior -> integerVar COMMA . integerListInterior
-    (29) integerListInterior -> . integerVar
-    (30) integerListInterior -> . integerVar COMMA integerListInterior
-    (34) integerVar -> . INTEGER
-
-    INTEGER         shift and go to state 20
-
-    integerListInterior            shift and go to state 62
-    integerVar                     shift and go to state 41
-
-state 55
-
-    (25) list -> PAR_OUVR stringListInterior PAR_FERM .
-
-    DO              reduce using rule 25 (list -> PAR_OUVR stringListInterior PAR_FERM .)
-    DOT_COMMA       reduce using rule 25 (list -> PAR_OUVR stringListInterior PAR_FERM .)
-
-
-state 56
-
-    (28) stringListInterior -> string COMMA . stringListInterior
-    (27) stringListInterior -> . string
-    (28) stringListInterior -> . string COMMA stringListInterior
-    (33) string -> . APO STRING APO
-
-    APO             shift and go to state 19
-
-    string                         shift and go to state 43
-    stringListInterior             shift and go to state 63
-
-state 57
-
-    (26) list -> PAR_OUVR integerListInterior PAR_FERM .
-
-    DO              reduce using rule 26 (list -> PAR_OUVR integerListInterior PAR_FERM .)
-    DOT_COMMA       reduce using rule 26 (list -> PAR_OUVR integerListInterior PAR_FERM .)
-
-
-state 58
-
-    (12) expression -> FOR variableN IN list DO . expressionList ENDFOR
-    (7) expressionList -> . expression DOT_COMMA
-    (8) expressionList -> . expression DOT_COMMA expressionList
-    (9) expression -> . variableN ASSIGNEMENT globalExpression
-    (10) expression -> . variableN ASSIGNEMENT list
-    (11) expression -> . PRINT globalExpression
-    (12) expression -> . FOR variableN IN list DO expressionList ENDFOR
-    (13) expression -> . FOR variableN IN variable DO expressionList ENDFOR
-    (14) expression -> . IF globalExpression DO expressionList ENDIF
-    (15) expression -> . IF globalExpression DO expressionList ELSE expressionList ENDIF
-    (32) variableN -> . VAR
-
-    PRINT           shift and go to state 12
-    FOR             shift and go to state 7
-    IF              shift and go to state 9
-    VAR             shift and go to state 10
-
-    variableN                      shift and go to state 6
-    expressionList                 shift and go to state 64
-    expression                     shift and go to state 11
-
-state 59
-
-    (13) expression -> FOR variableN IN variable DO . expressionList ENDFOR
-    (7) expressionList -> . expression DOT_COMMA
-    (8) expressionList -> . expression DOT_COMMA expressionList
-    (9) expression -> . variableN ASSIGNEMENT globalExpression
-    (10) expression -> . variableN ASSIGNEMENT list
-    (11) expression -> . PRINT globalExpression
-    (12) expression -> . FOR variableN IN list DO expressionList ENDFOR
-    (13) expression -> . FOR variableN IN variable DO expressionList ENDFOR
-    (14) expression -> . IF globalExpression DO expressionList ENDIF
-    (15) expression -> . IF globalExpression DO expressionList ELSE expressionList ENDIF
-    (32) variableN -> . VAR
-
-    PRINT           shift and go to state 12
-    FOR             shift and go to state 7
-    IF              shift and go to state 9
-    VAR             shift and go to state 10
-
-    variableN                      shift and go to state 6
-    expressionList                 shift and go to state 65
-    expression                     shift and go to state 11
-
-state 60
 
     (14) expression -> IF globalExpression DO expressionList ENDIF .
 
     DOT_COMMA       reduce using rule 14 (expression -> IF globalExpression DO expressionList ENDIF .)
 
 
-state 61
+state 55
 
     (15) expression -> IF globalExpression DO expressionList ELSE . expressionList ENDIF
     (7) expressionList -> . expression DOT_COMMA
@@ -1039,55 +953,141 @@ state 61
     (15) expression -> . IF globalExpression DO expressionList ELSE expressionList ENDIF
     (32) variableN -> . VAR
 
-    PRINT           shift and go to state 12
-    FOR             shift and go to state 7
+    PRINT           shift and go to state 10
+    FOR             shift and go to state 11
     IF              shift and go to state 9
-    VAR             shift and go to state 10
+    VAR             shift and go to state 7
 
-    variableN                      shift and go to state 6
-    expressionList                 shift and go to state 66
-    expression                     shift and go to state 11
+    expression                     shift and go to state 5
+    expressionList                 shift and go to state 62
+    variableN                      shift and go to state 12
+
+state 56
+
+    (13) expression -> FOR variableN IN variable DO . expressionList ENDFOR
+    (7) expressionList -> . expression DOT_COMMA
+    (8) expressionList -> . expression DOT_COMMA expressionList
+    (9) expression -> . variableN ASSIGNEMENT globalExpression
+    (10) expression -> . variableN ASSIGNEMENT list
+    (11) expression -> . PRINT globalExpression
+    (12) expression -> . FOR variableN IN list DO expressionList ENDFOR
+    (13) expression -> . FOR variableN IN variable DO expressionList ENDFOR
+    (14) expression -> . IF globalExpression DO expressionList ENDIF
+    (15) expression -> . IF globalExpression DO expressionList ELSE expressionList ENDIF
+    (32) variableN -> . VAR
+
+    PRINT           shift and go to state 10
+    FOR             shift and go to state 11
+    IF              shift and go to state 9
+    VAR             shift and go to state 7
+
+    expression                     shift and go to state 5
+    expressionList                 shift and go to state 63
+    variableN                      shift and go to state 12
+
+state 57
+
+    (12) expression -> FOR variableN IN list DO . expressionList ENDFOR
+    (7) expressionList -> . expression DOT_COMMA
+    (8) expressionList -> . expression DOT_COMMA expressionList
+    (9) expression -> . variableN ASSIGNEMENT globalExpression
+    (10) expression -> . variableN ASSIGNEMENT list
+    (11) expression -> . PRINT globalExpression
+    (12) expression -> . FOR variableN IN list DO expressionList ENDFOR
+    (13) expression -> . FOR variableN IN variable DO expressionList ENDFOR
+    (14) expression -> . IF globalExpression DO expressionList ENDIF
+    (15) expression -> . IF globalExpression DO expressionList ELSE expressionList ENDIF
+    (32) variableN -> . VAR
+
+    PRINT           shift and go to state 10
+    FOR             shift and go to state 11
+    IF              shift and go to state 9
+    VAR             shift and go to state 7
+
+    expression                     shift and go to state 5
+    variableN                      shift and go to state 12
+    expressionList                 shift and go to state 64
+
+state 58
+
+    (25) list -> PAR_OUVR stringListInterior PAR_FERM .
+
+    DOT_COMMA       reduce using rule 25 (list -> PAR_OUVR stringListInterior PAR_FERM .)
+    DO              reduce using rule 25 (list -> PAR_OUVR stringListInterior PAR_FERM .)
+
+
+state 59
+
+    (28) stringListInterior -> string COMMA . stringListInterior
+    (27) stringListInterior -> . string
+    (28) stringListInterior -> . string COMMA stringListInterior
+    (33) string -> . APO STRING APO
+
+    APO             shift and go to state 18
+
+    stringListInterior             shift and go to state 65
+    string                         shift and go to state 51
+
+state 60
+
+    (30) integerListInterior -> integerVar COMMA . integerListInterior
+    (29) integerListInterior -> . integerVar
+    (30) integerListInterior -> . integerVar COMMA integerListInterior
+    (34) integerVar -> . INTEGER
+
+    INTEGER         shift and go to state 20
+
+    integerVar                     shift and go to state 52
+    integerListInterior            shift and go to state 66
+
+state 61
+
+    (26) list -> PAR_OUVR integerListInterior PAR_FERM .
+
+    DOT_COMMA       reduce using rule 26 (list -> PAR_OUVR integerListInterior PAR_FERM .)
+    DO              reduce using rule 26 (list -> PAR_OUVR integerListInterior PAR_FERM .)
+
 
 state 62
 
-    (30) integerListInterior -> integerVar COMMA integerListInterior .
+    (15) expression -> IF globalExpression DO expressionList ELSE expressionList . ENDIF
 
-    PAR_FERM        reduce using rule 30 (integerListInterior -> integerVar COMMA integerListInterior .)
+    ENDIF           shift and go to state 67
 
 
 state 63
-
-    (28) stringListInterior -> string COMMA stringListInterior .
-
-    PAR_FERM        reduce using rule 28 (stringListInterior -> string COMMA stringListInterior .)
-
-
-state 64
-
-    (12) expression -> FOR variableN IN list DO expressionList . ENDFOR
-
-    ENDFOR          shift and go to state 67
-
-
-state 65
 
     (13) expression -> FOR variableN IN variable DO expressionList . ENDFOR
 
     ENDFOR          shift and go to state 68
 
 
+state 64
+
+    (12) expression -> FOR variableN IN list DO expressionList . ENDFOR
+
+    ENDFOR          shift and go to state 69
+
+
+state 65
+
+    (28) stringListInterior -> string COMMA stringListInterior .
+
+    PAR_FERM        reduce using rule 28 (stringListInterior -> string COMMA stringListInterior .)
+
+
 state 66
 
-    (15) expression -> IF globalExpression DO expressionList ELSE expressionList . ENDIF
+    (30) integerListInterior -> integerVar COMMA integerListInterior .
 
-    ENDIF           shift and go to state 69
+    PAR_FERM        reduce using rule 30 (integerListInterior -> integerVar COMMA integerListInterior .)
 
 
 state 67
 
-    (12) expression -> FOR variableN IN list DO expressionList ENDFOR .
+    (15) expression -> IF globalExpression DO expressionList ELSE expressionList ENDIF .
 
-    DOT_COMMA       reduce using rule 12 (expression -> FOR variableN IN list DO expressionList ENDFOR .)
+    DOT_COMMA       reduce using rule 15 (expression -> IF globalExpression DO expressionList ELSE expressionList ENDIF .)
 
 
 state 68
@@ -1099,7 +1099,7 @@ state 68
 
 state 69
 
-    (15) expression -> IF globalExpression DO expressionList ELSE expressionList ENDIF .
+    (12) expression -> FOR variableN IN list DO expressionList ENDFOR .
 
-    DOT_COMMA       reduce using rule 15 (expression -> IF globalExpression DO expressionList ELSE expressionList ENDIF .)
+    DOT_COMMA       reduce using rule 12 (expression -> FOR variableN IN list DO expressionList ENDFOR .)
 
