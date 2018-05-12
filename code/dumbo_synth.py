@@ -149,8 +149,12 @@ if __name__ == '__main__':
     os.makedirs('generated', exist_ok=True)
     import sys
     dico['+'] = ''
-    input1 = open(sys.argv[1]).read()
-    input2 = open(sys.argv[2]).read()
+    fichier1 = open(sys.argv[1])
+    input1 = fichier1.read()
+    fichier1.close()
+    fichier2 = open(sys.argv[2])
+    input2 = fichier2.read()
+    fichier2.close()
     result1 = yacc.parse(input1)
     dico = result1.evaluate(dico)
     result2 = yacc.parse(input2)
