@@ -1,4 +1,4 @@
 {{
-YOLO := ('yola','test');
-rule := 'Quoitin est le meilleur';
+label := 'realises par Tony Kaye';
+liste_label := ('American History X', 'Snowblind', 'Lake of Fire');
 }}
