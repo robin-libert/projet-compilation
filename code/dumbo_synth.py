@@ -25,8 +25,12 @@ def p_programme_dumboBloc(p):
 
 #dumbo BLoc
 def p_dumboBloc_expressionList(p):
-    '''dumboBloc : BLOC_BEGIN expressionList BLOC_END'''
-    p[0] = p[2]
+    '''dumboBloc : BLOC_BEGIN expressionList BLOC_END
+                 | BLOC_BEGIN BLOC_END'''
+    if(len(p) == 4):
+        p[0] = p[2]
+    elif(len(p) == 3):
+        p[0] = ElementVAR(None)
 
 #expression List
 def p_expressionList_expression(p):
@@ -39,12 +43,12 @@ def p_expressionList_expression(p):
 
 #expression
 def p_expression_variable(p):
-    '''expression : variableN ASSIGNEMENT stringExpression
+    '''expression : variableN ASSIGNEMENT globalExpression
                   | variableN ASSIGNEMENT list'''
-    dico[p[1]] = p[3]
+    p[0] = VariableASS(p[1], p[3])
 
 def p_expression_print(p):
-    '''expression : PRINT stringExpression'''
+    '''expression : PRINT globalExpression'''
     p[0] = Eprint(p[2])
 
 def p_expression_forList(p):
@@ -53,22 +57,28 @@ def p_expression_forList(p):
     p[0] = ForExpression(p[2], p[4], p[6])
 
 def p_expression_boolean(p):
-    '''expression : IF boolean DO expressionList ENDIF
-                  | IF boolean DO expressionList ELSE expressionList ENDIF'''
+    '''expression : IF globalExpression DO expressionList ENDIF
+                  | IF globalExpression DO expressionList ELSE expressionList ENDIF'''
     if(len(p) == 6):
         p[0] = IfExpression(p[2], p[4], None)
     elif(len(p) == 8):
         p[0] = IfExpression(p[2], p[4], p[6])
 
-#string Expression
-def p_stringExpression(p):
-    '''stringExpression : boolean
-                        | string
-                        | stringExpression DOT stringExpression'''
+#global Expression
+def p_globalExpression(p):
+    '''globalExpression : string
+                        | integerVar
+                        | variable
+                        | booleanVar
+                        | globalExpression BINOPERATOR globalExpression
+                        | globalExpression OPERATOR globalExpression
+                        | globalExpression ADD_OP globalExpression
+                        | globalExpression MUL_OP globalExpression
+                        | globalExpression DOT globalExpression'''
     if(len(p) == 2):
-        p[0] = StringExpression(p[1], None)
+        p[0] = globalExpression(p[1], None, None)
     elif(len(p) == 4):
-        p[0] = StringExpression(p[1], p[3])
+        p[0] = globalExpression(p[1], p[2], p[3])
 
 #List
 def p_list_int(p):
@@ -87,8 +97,8 @@ def p_stringListInterior(p):
 
 #'''' de integer
 def p_integerListInterior(p):
-    '''integerListInterior : integer
-                           | integer COMMA integerListInterior'''
+    '''integerListInterior : integerVar
+                           | integerVar COMMA integerListInterior'''
     if(len(p) == 2):
         p[0] = List(p[1], None)
     elif(len(p) == 4):
@@ -107,47 +117,17 @@ def p_variable_name(p):
 #string
 def p_string_seString(p):
     '''string : APO STRING APO'''
-    p[0] = EString(p[2])
-
-#integer
-def p_integer(p):
-    '''integer : integerVar
-               | variable
-               | integer ADD_OP integer
-               | integer MUL_OP integer'''
-    if(len(p) == 2):
-        p[0] = globalInteger(p[1], None, None)
-    elif(len(p) == 4):
-        p[0] = globalInteger(p[1], p[2], p[3])
+    p[0] = ElementVAR(p[2])
 
 #integer Variable
 def p_integerVar(p):
     '''integerVar : INTEGER'''
-    p[0] = IntegerVar(p[1])
-
-#boolean
-def p_boolean(p):
-    '''boolean : booleanVar
-               | booleanOP
-               | boolean BINOPERATOR boolean'''
-    if(len(p) == 2):
-        p[0] = boolean(p[1], None, None)
-    elif(len(p) == 4):
-        p[0] = boolean(p[1], p[2], p[3])
-
-#boolean operator
-def p_booleanOP(p):
-    '''booleanOP : integer OPERATOR integer
-                 | integer'''
-    if(len(p) == 2):
-        p[0] = booleanExpression(p[1], None, None)
-    elif(len(p) == 4):
-        p[0] = booleanExpression(p[1],p[2],p[3])
+    p[0] = ElementVAR(p[1])
 
 #boolean var
 def p_booleanVar(p):
     '''booleanVar : BOOLEAN'''
-    p[0] = booleanVAR(p[1])
+    p[0] = ElementVAR(p[1])
 
 #error
 def p_error(p):
@@ -160,6 +140,7 @@ precedence = (
     ("left","ADD_OP"),
     ("left","MUL_OP"),
     ("left","BINOPERATOR"),
+    ("left","OPERATOR"),
 )
 
 yacc.yacc(outputdir='generated')
@@ -167,8 +148,16 @@ yacc.yacc(outputdir='generated')
 if __name__ == '__main__':
     os.makedirs('generated', exist_ok=True)
     import sys
-    input1 = open(sys.argv[1]).read()
-    input2 = open(sys.argv[2]).read()
-    yacc.parse(input1)
+    dico['+'] = ''
+    fichier1 = open(sys.argv[1])
+    input1 = fichier1.read()
+    fichier1.close()
+    fichier2 = open(sys.argv[2])
+    input2 = fichier2.read()
+    fichier2.close()
+    result1 = yacc.parse(input1)
+    dico = result1.evaluate(dico)
     result2 = yacc.parse(input2)
-    result2.evaluate(dico)
+    dico = result2.evaluate(dico)
+    with open(sys.argv[3], "w") as fichier:
+        fichier.write(dico['+'])

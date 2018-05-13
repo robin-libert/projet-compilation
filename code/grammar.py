@@ -1,37 +1,54 @@
-#programme avec en element1 un text ou un dumboBloc et en elment deux (si il y en a un) un autre programme.
 class Programme:
-
+    #Cette classe un programme/sous-programme qui prend en premier parametre un texte ou un dumbo Bloc et en deuxième parametre un programme/sous-programme ou rien.
     def __init__(self, element1 , element2):
         self.element1 = element1
         self.element2 = element2
 
     def evaluate(self, dico):
-        self.element1.evaluate(dico)
+        #evalue les deux elements (ou l'ements si il n'y en a qu'un) envoye en parametre.
+        x = self.element1.evaluate(dico)
+        if(x is not None):
+            dico = x
         if self.element2 is not None:
-            self.element2.evaluate(dico)
+            y = self.element2.evaluate(dico)
+            if(y is not None):
+                dico = y
+        return dico
+    
 
-#liste d'expression contenant en premier elment une expression et en deuxieme elment (si il y en a un) une autre liste d'expression.
 class ExpressionList:
+    #Cette classe represente une liste d'expression qui prend en premier parametre une expression et en deuxieme si il y en a une une liste d'expression.
     def __init__(self, element1 , element2):
         self.element1 = element1
         self.element2 = element2
 
-    def evaluate(self, dico):
-        self.element1.evaluate(dico)
-        if self.element2 is not None:
-            self.element2.evaluate(dico)
 
-#cette classe affiche l'elment dans la classe qui lui est envoyee (la classe doit avoir sa methode "evaluate" qui lui renvoi un elment a afficher)
+    def evaluate(self, dico):
+        #evalue les deux elements (ou l'ements si il n'y en a qu'un) envoye en parametre.
+        x = self.element1.evaluate(dico)
+        if(x is not None):
+            dico = x
+        if self.element2 is not None:
+            y = self.element2.evaluate(dico)
+            if(y is not None):
+                dico = y
+        return dico
+
+
 class Eprint:
+    #Cette classe effectue la fonction d'un print et prend une global expression en parametre.
     def __init__(self, txt):
         self.txt = txt
 
     def evaluate(self, dico):
+        #affiche l'element.
         txtTMP = self.txt.evaluate(dico)
-        print(txtTMP,end='')
+        dico['+'] = (dico['+'] + str(txtTMP))
+        return dico
 
-#fais un if (ou if else si on lui envoit deux expression list) avec comme condition le boolean qui lui est envoye.
+
 class IfExpression:
+    #Cette classe represente un if si il y a deux parametre (le premier etant la condition et le second l'expression) si un troisieme parametre est passe alors celui-ci est pris comme l'expression du else.
     def __init__(self, boolean, expressionList1, expressionList2):
         self.boolean = boolean
         self.expressionList1 = expressionList1
@@ -39,145 +56,108 @@ class IfExpression:
 
 
     def evaluate(self, dico):
-        if(self.boolean.evaluate(dico)):
+        #calcul la condition avant de la gerer.
+        v = self.boolean.evaluate(dico)
+        if(v == 'true'):
             self.expressionList1.evaluate(dico)
         elif self.expressionList2 is not None:
             self.expressionList2.evaluate(dico)
 
-#la methode evaluate de la classe renvoi soit un entier si il n'y a qu'un element soit l'operation entre le premier et le second entier (var1 et var2).
-class globalInteger:
 
+class globalExpression:
+    #Cette classe represente une expression de type boolean, integer ou string.Formatter le premier element doit sauf pour la concatenation etre du meme type que le troisieme element(si il y en a un)
     def __init__(self, var1, opera, var2):
         self.var1 = var1
         self.var2 = var2
         self.opera = opera
 
+    # retourne le premier element et si il y a trois element l'opration sur le premeier et le troisieme element.
     def evaluate(self, dico):
         operations = {
         '+' : lambda x , y: x+y,
         '-' : lambda x , y: x-y,
         '*' : lambda x , y: x*y,
         '/' : lambda x , y: x/y,
+        '<' : lambda x , y: x<y,
+        '>' : lambda x , y: x>y,
+        '=' : lambda x , y: x==y,
+        '!=' : lambda x , y: x!=y,
+        'and' : lambda x , y: x and y,
+        'or' : lambda x , y: x or y,
+        '.' : lambda x , y: "{0}{1}".format(x , y),
         }
         if(self.opera is None or self.var2 is None):
             return self.var1.evaluate(dico)
         else:
             return operations[self.opera](self.var1.evaluate(dico),self.var2.evaluate(dico))
 
-#la methode evaluate de la classe renvoi renvoi le boolean ou l'operation binaire entre les deux variables (var1 et var2).
-class booleanExpression:
 
-    def __init__(self, var1, opera, var2):
-        self.var1 = var1
-        self.var2 = var2
-        self.opera = opera
-
-    def evaluate(self, dico):
-        operator = {
-        '<' : lambda x , y: x<y,
-        '>' : lambda x , y: x>y,
-        '=' : lambda x , y: x==y,
-        '!=' : lambda x , y: x!=y,
-        }
-        if(self.opera is None or self.var2 is None):
-            return self.var1.evaluate(dico)
-        else:
-            return operator[self.opera](self.var1.evaluate(dico),self.var2.evaluate(dico))
-
-#la methode evaluate de la classe renvoi le boolean ou le resultat de l'operation entre les deux boolean (si il y a deux boolean).
-class boolean:
-    def __init__(self, var1, opera, var2):
-        self.var1 = var1
-        self.var2 = var2
-        self.opera = opera
-    
-    def evaluate(self, dico):
-        operator = {
-        'and' : lambda x , y: x and y,
-        'or' : lambda x , y: x or y,
-        }
-        if(self.opera is None or self.var2 is None):
-            return self.var1.evaluate(dico)
-        else:
-            return operator[self.opera](self.var1.evaluate(dico),self.var2.evaluate(dico))
-
-#la methode evaluate de la classe change la valeur de la variable var dans le dictionnaire et l'envoi a la liste d'expression pour chaque variable de la liste.
 class ForExpression:
+    #Cette classe represente un for.
     def __init__(self, var, stringList, expressionList):
         self.var = var
         self.stringList = stringList
         self.expressionList = expressionList
 
+    #envoi la valeur de chaque variable de la liste dans l'expression.
     def evaluate(self, dico):
+        self.dicoTMP = dico
         for elem in self.stringList.evaluate(dico):
-            dico2 = dico.copy() #pour plus de securite chacun aura son dico
-            dico2[self.var] = EForVariable(elem)
-            self.expressionList.evaluate(dico2)
+            dico2 = self.dicoTMP.copy() #pour plus de securite chacun aura son dico
+            dico2[self.var] = ElementVAR(elem)
+            self.dicoTMP = self.expressionList.evaluate(dico2)
+        return self.dicoTMP
 
-#represente une list avec var1 le debut de la liste et var2 la suite de la liste.
+    
 class List:
+    #Cette classe represente une liste.
     def __init__(self, var1, var2):
         self.var1 = var1
         self.var2 = var2
 
+    #renvoi une liste avec le premier element et (si il y en a une) la suite de la liste.
     def evaluate(self, dico):
         if self.var2 is None:
             return [self.var1.evaluate(dico)]
         else:
             return [self.var1.evaluate(dico)] + self.var2.evaluate(dico)
 
-#fais un string si il y a un elemenent (var1) ou une concatenation de string si il y a deux element(var1.var2) 
-class StringExpression:
-    def __init__(self, var1, var2):
-        self.var1 = var1
-        self.var2 = var2
+class VariableASS:
+    #Cette classe represente une assignation de variable
+    def __init__(self, variable, elem):
+        self.variable = variable
+        self.elem = elem
 
+    #assigne la variable dans le dictionnaire et la renvoi.
     def evaluate(self, dico):
-        if self.var2 is None:
-            return self.var1.evaluate(dico)
-        else:
-            return self.var1.evaluate(dico) + self.var2.evaluate(dico)
+        dico[self.variable] = ElementVAR(self.elem.evaluate(dico))
+        return dico
 
 
-class booleanVAR:
+class ElementVAR:
+    #cette classe represente un element.
     def __init__(self, elem):
         self.elem = elem
-    
+
+    #revoi cet element.
     def evaluate(self, dico):
         return self.elem
-
-class EForVariable:
-    def __init__(self, elem):
-        self.elem = elem
-    
-    def evaluate(self, dico):
-        return self.elem
-
-class IntegerVar:
-    def __init__(self, inte):
-        self.inte = inte
-
-    def evaluate(self, dico):
-        return self.inte
-
-class EString:
-    def __init__(self, txt):
-        self.txt = txt
-    
-    def evaluate(self, dico):
-        return self.txt
 
 class EVariable:
+    #Cette classe represenete une variable
     def __init__(self, var):
         self.var = var
 
+    #renvoi la valeur de cette variable dans le dictionnaire.
     def evaluate(self,dico):
         return dico[self.var].evaluate(dico)
 
 class Text:
-    
+    #Cette classe represente le texte hors dumbo Bloc
     def __init__(self, txt):
         self.txt = txt
 
     def evaluate(self, dico):
-        print(self.txt,end='')
+        txtTMP = self.txt
+        dico['+'] = (dico['+'] + txtTMP)
+        return dico

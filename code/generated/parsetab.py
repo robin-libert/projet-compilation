@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftDOTleftADD_OPleftMUL_OPleftBINOPERATORADD_OP APO ASSIGNEMENT BINOPERATOR BLOC_BEGIN BLOC_END BOOLEAN COMMA DO DOT DOT_COMMA ELSE ENDFOR ENDIF FOR IF IN INTEGER MUL_OP OPERATOR PAR_FERM PAR_OUVR PRINT STRING TXT VARprogramme : TXT \n                 | TXT programmeprogramme : dumboBloc\n                 | dumboBloc programmedumboBloc : BLOC_BEGIN expressionList BLOC_ENDexpressionList : expression DOT_COMMA\n                      | expression DOT_COMMA expressionListexpression : variableN ASSIGNEMENT stringExpression\n                  | variableN ASSIGNEMENT listexpression : PRINT stringExpressionexpression : FOR variableN IN list DO expressionList ENDFOR\n                  | FOR variableN IN variable DO expressionList ENDFORexpression : IF boolean DO expressionList ENDIF\n                  | IF boolean DO expressionList ELSE expressionList ENDIFstringExpression : boolean\n                        | string\n                        | stringExpression DOT stringExpressionlist : PAR_OUVR stringListInterior PAR_FERM\n            | PAR_OUVR integerListInterior PAR_FERMstringListInterior : string\n                          | string COMMA stringListInteriorintegerListInterior : integer\n                           | integer COMMA integerListInteriorvariable : VARvariableN : VARstring : APO STRING APOinteger : integerVar\n               | variable\n               | integer ADD_OP integer\n               | integer MUL_OP integerintegerVar : INTEGERboolean : booleanVar\n               | booleanOP\n               | boolean BINOPERATOR booleanbooleanOP : integer OPERATOR integer\n                 | integerbooleanVar : BOOLEAN'
+_lr_signature = 'leftDOTleftADD_OPleftMUL_OPleftBINOPERATORleftOPERATORADD_OP APO ASSIGNEMENT BINOPERATOR BLOC_BEGIN BLOC_END BOOLEAN COMMA DO DOT DOT_COMMA ELSE ENDFOR ENDIF FOR IF IN INTEGER MUL_OP OPERATOR PAR_FERM PAR_OUVR PRINT STRING TXT VARprogramme : TXT \n                 | TXT programmeprogramme : dumboBloc\n                 | dumboBloc programmedumboBloc : BLOC_BEGIN expressionList BLOC_END\n                 | BLOC_BEGIN BLOC_ENDexpressionList : expression DOT_COMMA\n                      | expression DOT_COMMA expressionListexpression : variableN ASSIGNEMENT globalExpression\n                  | variableN ASSIGNEMENT listexpression : PRINT globalExpressionexpression : FOR variableN IN list DO expressionList ENDFOR\n                  | FOR variableN IN variable DO expressionList ENDFORexpression : IF globalExpression DO expressionList ENDIF\n                  | IF globalExpression DO expressionList ELSE expressionList ENDIFglobalExpression : string\n                        | integerVar\n                        | variable\n                        | booleanVar\n                        | globalExpression BINOPERATOR globalExpression\n                        | globalExpression OPERATOR globalExpression\n                        | globalExpression ADD_OP globalExpression\n                        | globalExpression MUL_OP globalExpression\n                        | globalExpression DOT globalExpressionlist : PAR_OUVR stringListInterior PAR_FERM\n            | PAR_OUVR integerListInterior PAR_FERMstringListInterior : string\n                          | string COMMA stringListInteriorintegerListInterior : integerVar\n                           | integerVar COMMA integerListInteriorvariable : VARvariableN : VARstring : APO STRING APOintegerVar : INTEGERbooleanVar : BOOLEAN'
     
-_lr_action_items = {'MUL_OP':([19,20,21,22,23,45,49,50,51,],[-28,-27,-24,-31,37,37,37,-30,37,]),'APO':([12,14,32,41,42,57,],[28,28,28,54,28,28,]),'BOOLEAN':([7,12,14,35,42,],[18,18,18,18,18,]),'TXT':([0,1,4,26,],[1,1,1,-5,]),'DOT_COMMA':([9,15,16,18,19,20,21,22,23,27,29,30,31,33,48,49,50,51,54,55,56,59,61,69,70,71,],[25,-32,-33,-37,-28,-27,-24,-31,-36,-15,-16,-10,-9,-8,-34,-35,-30,-29,-26,-17,-18,-19,-13,-14,-11,-12,]),'ENDIF':([25,40,47,66,],[-6,-7,61,69,]),'BLOC_END':([10,25,40,],[26,-6,-7,]),'PAR_OUVR':([14,39,],[32,32,]),'ADD_OP':([19,20,21,22,23,45,49,50,51,],[-28,-27,-24,-31,38,38,38,-30,-29,]),'INTEGER':([7,12,14,32,35,36,37,38,42,58,],[22,22,22,22,22,22,22,22,22,22,]),'OPERATOR':([19,20,21,22,23,50,51,],[-28,-27,-24,-31,36,-30,-29,]),'FOR':([3,25,34,60,62,63,],[8,8,8,8,8,8,]),'STRING':([28,],[41,]),'ELSE':([25,40,47,],[-6,-7,60,]),'PAR_FERM':([19,20,21,22,43,44,45,46,50,51,54,64,65,],[-28,-27,-24,-31,56,-20,-22,59,-30,-29,-26,-21,-23,]),'DO':([15,16,17,18,19,20,21,22,23,48,49,50,51,52,53,56,59,],[-32,-33,34,-37,-28,-27,-24,-31,-36,-34,-35,-30,-29,62,63,-18,-19,]),'COMMA':([19,20,21,22,44,45,50,51,54,],[-28,-27,-24,-31,57,58,-30,-29,-26,]),'IF':([3,25,34,60,62,63,],[7,7,7,7,7,7,]),'ASSIGNEMENT':([6,11,],[14,-25,]),'DOT':([15,16,18,19,20,21,22,23,27,29,30,33,48,49,50,51,54,55,],[-32,-33,-37,-28,-27,-24,-31,-36,-15,-16,42,42,-34,-35,-30,-29,-26,-17,]),'ENDFOR':([25,40,67,68,],[-6,-7,70,71,]),'BINOPERATOR':([15,16,17,18,19,20,21,22,23,27,48,49,50,51,],[-32,-33,35,-37,-28,-27,-24,-31,-36,35,-34,-35,-30,-29,]),'VAR':([3,7,8,12,14,25,32,34,35,36,37,38,39,42,58,60,62,63,],[11,21,11,21,21,11,21,11,21,21,21,21,21,21,21,11,11,11,]),'$end':([1,2,4,5,13,26,],[-1,0,-3,-2,-4,-5,]),'IN':([11,24,],[-25,39,]),'BLOC_BEGIN':([0,1,4,26,],[3,3,3,-5,]),'PRINT':([3,25,34,60,62,63,],[12,12,12,12,12,12,]),}
+_lr_action_items = {'MUL_OP':([15,16,17,18,19,21,22,23,27,39,42,43,44,45,46,47,],[-35,-16,-17,-19,32,-31,-18,-34,32,32,32,-21,-23,32,-20,-33,]),'DO':([15,16,17,18,19,21,22,23,42,43,44,45,46,47,48,49,59,60,],[-35,-16,-17,-19,29,-31,-18,-34,-24,-21,-23,-22,-20,-33,56,57,-25,-26,]),'IF':([1,26,29,55,56,57,],[5,5,5,5,5,5,]),'ADD_OP':([15,16,17,18,19,21,22,23,27,39,42,43,44,45,46,47,],[-35,-16,-17,-19,33,-31,-18,-34,33,33,33,-21,-23,-22,-20,-33,]),'BINOPERATOR':([15,16,17,18,19,21,22,23,27,39,42,43,44,45,46,47,],[-35,-16,-17,-19,34,-31,-18,-34,34,34,34,-21,34,34,-20,-33,]),'PAR_OUVR':([28,36,],[38,38,]),'VAR':([1,5,7,10,26,28,29,30,31,32,33,34,36,55,56,57,],[12,21,12,21,12,21,12,21,21,21,21,21,21,12,12,12,]),'PAR_FERM':([23,47,50,51,52,53,65,66,],[-34,-33,-27,59,60,-29,-28,-30,]),'APO':([5,10,28,30,31,32,33,34,35,38,58,],[20,20,20,20,20,20,20,20,47,20,20,]),'BLOC_END':([1,6,26,37,],[9,24,-7,-8,]),'PRINT':([1,26,29,55,56,57,],[10,10,10,10,10,10,]),'STRING':([20,],[35,]),'BOOLEAN':([5,10,28,30,31,32,33,34,],[15,15,15,15,15,15,15,15,]),'ASSIGNEMENT':([11,12,],[28,-32,]),'BLOC_BEGIN':([0,3,4,9,24,],[1,1,1,-6,-5,]),'DOT':([15,16,17,18,19,21,22,23,27,39,42,43,44,45,46,47,],[-35,-16,-17,-19,30,-31,-18,-34,30,30,-24,-21,-23,-22,-20,-33,]),'INTEGER':([5,10,28,30,31,32,33,34,38,61,],[23,23,23,23,23,23,23,23,23,23,]),'OPERATOR':([15,16,17,18,19,21,22,23,27,39,42,43,44,45,46,47,],[-35,-16,-17,-19,31,-31,-18,-34,31,31,31,-21,31,31,31,-33,]),'ELSE':([26,37,41,],[-7,-8,55,]),'DOT_COMMA':([8,15,16,17,18,21,22,23,27,39,40,42,43,44,45,46,47,54,59,60,67,68,69,],[26,-35,-16,-17,-19,-31,-18,-34,-11,-9,-10,-24,-21,-23,-22,-20,-33,-14,-25,-26,-15,-13,-12,]),'COMMA':([23,47,50,53,],[-34,-33,58,61,]),'TXT':([0,3,4,9,24,],[4,4,4,-6,-5,]),'$end':([2,3,4,9,13,14,24,],[0,-3,-1,-6,-4,-2,-5,]),'ENDIF':([26,37,41,62,],[-7,-8,54,67,]),'FOR':([1,26,29,55,56,57,],[7,7,7,7,7,7,]),'IN':([12,25,],[-32,36,]),'ENDFOR':([26,37,63,64,],[-7,-8,68,69,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'variableN':([3,8,25,34,60,62,63,],[6,24,6,6,6,6,6,]),'booleanOP':([7,12,14,35,42,],[16,16,16,16,16,]),'boolean':([7,12,14,35,42,],[17,27,27,48,27,]),'booleanVar':([7,12,14,35,42,],[15,15,15,15,15,]),'integerVar':([7,12,14,32,35,36,37,38,42,58,],[20,20,20,20,20,20,20,20,20,20,]),'programme':([0,1,4,],[2,5,13,]),'variable':([7,12,14,32,35,36,37,38,39,42,58,],[19,19,19,19,19,19,19,19,53,19,19,]),'dumboBloc':([0,1,4,],[4,4,4,]),'stringListInterior':([32,57,],[43,64,]),'string':([12,14,32,42,57,],[29,29,44,29,44,]),'list':([14,39,],[31,52,]),'expression':([3,25,34,60,62,63,],[9,9,9,9,9,9,]),'expressionList':([3,25,34,60,62,63,],[10,40,47,66,67,68,]),'integer':([7,12,14,32,35,36,37,38,42,58,],[23,23,23,45,23,49,50,51,23,45,]),'integerListInterior':([32,58,],[46,65,]),'stringExpression':([12,14,42,],[30,33,55,]),}
+_lr_goto_items = {'variable':([5,10,28,30,31,32,33,34,36,],[22,22,22,22,22,22,22,22,48,]),'integerVar':([5,10,28,30,31,32,33,34,38,61,],[17,17,17,17,17,17,17,17,53,53,]),'expressionList':([1,26,29,55,56,57,],[6,37,41,62,63,64,]),'booleanVar':([5,10,28,30,31,32,33,34,],[18,18,18,18,18,18,18,18,]),'dumboBloc':([0,3,4,],[3,3,3,]),'globalExpression':([5,10,28,30,31,32,33,34,],[19,27,39,42,43,44,45,46,]),'programme':([0,3,4,],[2,13,14,]),'expression':([1,26,29,55,56,57,],[8,8,8,8,8,8,]),'integerListInterior':([38,61,],[52,66,]),'stringListInterior':([38,58,],[51,65,]),'string':([5,10,28,30,31,32,33,34,38,58,],[16,16,16,16,16,16,16,16,50,50,]),'variableN':([1,7,26,29,55,56,57,],[11,25,11,11,11,11,11,]),'list':([28,36,],[40,49,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -32,36 +32,34 @@ _lr_productions = [
   ('programme -> dumboBloc','programme',1,'p_programme_dumboBloc','dumbo_synth.py',19),
   ('programme -> dumboBloc programme','programme',2,'p_programme_dumboBloc','dumbo_synth.py',20),
   ('dumboBloc -> BLOC_BEGIN expressionList BLOC_END','dumboBloc',3,'p_dumboBloc_expressionList','dumbo_synth.py',28),
-  ('expressionList -> expression DOT_COMMA','expressionList',2,'p_expressionList_expression','dumbo_synth.py',33),
-  ('expressionList -> expression DOT_COMMA expressionList','expressionList',3,'p_expressionList_expression','dumbo_synth.py',34),
-  ('expression -> variableN ASSIGNEMENT stringExpression','expression',3,'p_expression_variable','dumbo_synth.py',42),
-  ('expression -> variableN ASSIGNEMENT list','expression',3,'p_expression_variable','dumbo_synth.py',43),
-  ('expression -> PRINT stringExpression','expression',2,'p_expression_print','dumbo_synth.py',47),
-  ('expression -> FOR variableN IN list DO expressionList ENDFOR','expression',7,'p_expression_forList','dumbo_synth.py',51),
-  ('expression -> FOR variableN IN variable DO expressionList ENDFOR','expression',7,'p_expression_forList','dumbo_synth.py',52),
-  ('expression -> IF boolean DO expressionList ENDIF','expression',5,'p_expression_boolean','dumbo_synth.py',56),
-  ('expression -> IF boolean DO expressionList ELSE expressionList ENDIF','expression',7,'p_expression_boolean','dumbo_synth.py',57),
-  ('stringExpression -> boolean','stringExpression',1,'p_stringExpression','dumbo_synth.py',65),
-  ('stringExpression -> string','stringExpression',1,'p_stringExpression','dumbo_synth.py',66),
-  ('stringExpression -> stringExpression DOT stringExpression','stringExpression',3,'p_stringExpression','dumbo_synth.py',67),
-  ('list -> PAR_OUVR stringListInterior PAR_FERM','list',3,'p_list_int','dumbo_synth.py',75),
-  ('list -> PAR_OUVR integerListInterior PAR_FERM','list',3,'p_list_int','dumbo_synth.py',76),
-  ('stringListInterior -> string','stringListInterior',1,'p_stringListInterior','dumbo_synth.py',81),
-  ('stringListInterior -> string COMMA stringListInterior','stringListInterior',3,'p_stringListInterior','dumbo_synth.py',82),
-  ('integerListInterior -> integer','integerListInterior',1,'p_integerListInterior','dumbo_synth.py',90),
-  ('integerListInterior -> integer COMMA integerListInterior','integerListInterior',3,'p_integerListInterior','dumbo_synth.py',91),
-  ('variable -> VAR','variable',1,'p_variable_dico','dumbo_synth.py',100),
-  ('variableN -> VAR','variableN',1,'p_variable_name','dumbo_synth.py',104),
-  ('string -> APO STRING APO','string',3,'p_string_seString','dumbo_synth.py',109),
-  ('integer -> integerVar','integer',1,'p_integer','dumbo_synth.py',114),
-  ('integer -> variable','integer',1,'p_integer','dumbo_synth.py',115),
-  ('integer -> integer ADD_OP integer','integer',3,'p_integer','dumbo_synth.py',116),
-  ('integer -> integer MUL_OP integer','integer',3,'p_integer','dumbo_synth.py',117),
-  ('integerVar -> INTEGER','integerVar',1,'p_integerVar','dumbo_synth.py',125),
-  ('boolean -> booleanVar','boolean',1,'p_boolean','dumbo_synth.py',130),
-  ('boolean -> booleanOP','boolean',1,'p_boolean','dumbo_synth.py',131),
-  ('boolean -> boolean BINOPERATOR boolean','boolean',3,'p_boolean','dumbo_synth.py',132),
-  ('booleanOP -> integer OPERATOR integer','booleanOP',3,'p_booleanOP','dumbo_synth.py',140),
-  ('booleanOP -> integer','booleanOP',1,'p_booleanOP','dumbo_synth.py',141),
-  ('booleanVar -> BOOLEAN','booleanVar',1,'p_booleanVar','dumbo_synth.py',149),
+  ('dumboBloc -> BLOC_BEGIN BLOC_END','dumboBloc',2,'p_dumboBloc_expressionList','dumbo_synth.py',29),
+  ('expressionList -> expression DOT_COMMA','expressionList',2,'p_expressionList_expression','dumbo_synth.py',37),
+  ('expressionList -> expression DOT_COMMA expressionList','expressionList',3,'p_expressionList_expression','dumbo_synth.py',38),
+  ('expression -> variableN ASSIGNEMENT globalExpression','expression',3,'p_expression_variable','dumbo_synth.py',46),
+  ('expression -> variableN ASSIGNEMENT list','expression',3,'p_expression_variable','dumbo_synth.py',47),
+  ('expression -> PRINT globalExpression','expression',2,'p_expression_print','dumbo_synth.py',51),
+  ('expression -> FOR variableN IN list DO expressionList ENDFOR','expression',7,'p_expression_forList','dumbo_synth.py',55),
+  ('expression -> FOR variableN IN variable DO expressionList ENDFOR','expression',7,'p_expression_forList','dumbo_synth.py',56),
+  ('expression -> IF globalExpression DO expressionList ENDIF','expression',5,'p_expression_boolean','dumbo_synth.py',60),
+  ('expression -> IF globalExpression DO expressionList ELSE expressionList ENDIF','expression',7,'p_expression_boolean','dumbo_synth.py',61),
+  ('globalExpression -> string','globalExpression',1,'p_globalExpression','dumbo_synth.py',69),
+  ('globalExpression -> integerVar','globalExpression',1,'p_globalExpression','dumbo_synth.py',70),
+  ('globalExpression -> variable','globalExpression',1,'p_globalExpression','dumbo_synth.py',71),
+  ('globalExpression -> booleanVar','globalExpression',1,'p_globalExpression','dumbo_synth.py',72),
+  ('globalExpression -> globalExpression BINOPERATOR globalExpression','globalExpression',3,'p_globalExpression','dumbo_synth.py',73),
+  ('globalExpression -> globalExpression OPERATOR globalExpression','globalExpression',3,'p_globalExpression','dumbo_synth.py',74),
+  ('globalExpression -> globalExpression ADD_OP globalExpression','globalExpression',3,'p_globalExpression','dumbo_synth.py',75),
+  ('globalExpression -> globalExpression MUL_OP globalExpression','globalExpression',3,'p_globalExpression','dumbo_synth.py',76),
+  ('globalExpression -> globalExpression DOT globalExpression','globalExpression',3,'p_globalExpression','dumbo_synth.py',77),
+  ('list -> PAR_OUVR stringListInterior PAR_FERM','list',3,'p_list_int','dumbo_synth.py',85),
+  ('list -> PAR_OUVR integerListInterior PAR_FERM','list',3,'p_list_int','dumbo_synth.py',86),
+  ('stringListInterior -> string','stringListInterior',1,'p_stringListInterior','dumbo_synth.py',91),
+  ('stringListInterior -> string COMMA stringListInterior','stringListInterior',3,'p_stringListInterior','dumbo_synth.py',92),
+  ('integerListInterior -> integerVar','integerListInterior',1,'p_integerListInterior','dumbo_synth.py',100),
+  ('integerListInterior -> integerVar COMMA integerListInterior','integerListInterior',3,'p_integerListInterior','dumbo_synth.py',101),
+  ('variable -> VAR','variable',1,'p_variable_dico','dumbo_synth.py',110),
+  ('variableN -> VAR','variableN',1,'p_variable_name','dumbo_synth.py',114),
+  ('string -> APO STRING APO','string',3,'p_string_seString','dumbo_synth.py',119),
+  ('integerVar -> INTEGER','integerVar',1,'p_integerVar','dumbo_synth.py',124),
+  ('booleanVar -> BOOLEAN','booleanVar',1,'p_booleanVar','dumbo_synth.py',129),
 ]

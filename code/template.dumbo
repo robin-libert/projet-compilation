@@ -1,3 +1,0 @@
-<test1><test2>
-    {{for c in YOLO do print c.','; endfor; print rule;}} on le sait
-   {{if true do if true do print 'a'; endif; else print 'a'; endif;}} <test2><test1>

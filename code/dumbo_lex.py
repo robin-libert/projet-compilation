@@ -46,7 +46,7 @@ def t_BLOC_BEGIN(t):
     return t
 
 def t_TXT(t):
-    r'[\w|;|&|<|>|\"|_|-|\.|\\|\/|\n|\p|:|\,| \t]+'
+    r'[\w|;|&|<|>|\"|_|-|\.|\\|\/|\n|\p|:|\,|=| \t]+'
     return t
 
 def t_newline(t):
@@ -61,7 +61,7 @@ def t_inString_APO(t):
     return t
 
 def t_inString_STRING(t):
-    r'[\w|;|&|<|>|\"|_|-|\.|\\|\/|\n|\p|:|\,| ]+'
+    r'[\w|;|&|<|>|\"|_|-|\.|\\|\/|\n|\p|:|\,|=| \t]+'
     return t
 
 def t_inString_newline(t):
@@ -94,6 +94,10 @@ def t_inCode_DO(t):
 
 def t_inCode_ENDFOR(t):
     r' endfor '
+    return t
+
+def t_inCode_BINOPERATOR(t):
+    r' or | and '
     return t
 
 def t_inCode_IF(t):
@@ -163,9 +167,8 @@ def t_inCode_newline(t):
 
 def t_inCode_OPERATOR(t):
     r'<|>|=|!='
+    return t
 
-def t_inCode_BINOPERATOR(t):
-    r'or|and'
 
 t_inCode_ignore = ' \t'
 
