@@ -127,7 +127,7 @@ def p_integerVar(p):
 #boolean var
 def p_booleanVar(p):
     '''booleanVar : BOOLEAN'''
-    p[0] = ElementVAR(p[1])
+    p[0] = BooleanVAR(p[1])
 
 #error
 def p_error(p):

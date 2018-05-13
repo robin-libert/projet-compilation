@@ -57,8 +57,7 @@ class IfExpression:
 
     def evaluate(self, dico):
         #calcul la condition avant de la gerer.
-        v = self.boolean.evaluate(dico)
-        if(v == 'true'):
+        if(self.boolean.evaluate(dico)):
             self.expressionList1.evaluate(dico)
         elif self.expressionList2 is not None:
             self.expressionList2.evaluate(dico)
@@ -142,6 +141,18 @@ class ElementVAR:
     #revoi cet element.
     def evaluate(self, dico):
         return self.elem
+
+class BooleanVAR:
+    #cette classe represente un boolean.
+    def __init__(self, elem):
+        self.elem = elem
+
+    #revoi cet True si c'est true, False si c'est false.
+    def evaluate(self, dico):
+        if(self.elem == 'true'):
+            return True
+        elif(self.elem == 'false'):
+            return False
 
 class EVariable:
     #Cette classe represenete une variable

@@ -116,6 +116,10 @@ def t_inCode_PRINT(t):
     r' print '
     return t
 
+def t_inCode_BOOLEAN(t):
+    r' true | false '
+    return t
+
 def t_inCode_INTEGER(t):
     r'\d+'
     t.value = int(t.value)
@@ -151,10 +155,6 @@ def t_inCode_DOT(t):
 
 def t_inCode_ASSIGNEMENT(t):
     r':='
-    return t
-
-def t_inCode_BOOLEAN(t):
-    r'true|false'
     return t
 
 def t_inCode_VAR(t):
