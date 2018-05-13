@@ -106,7 +106,7 @@ expression $\leftarrow$ FOR variableN IN list DO expressionList ENDFOR | FOR var
 
 expression $\leftarrow$ IF boolean DO expressionList ENDIF | IF boolean DO expressionList ELSE expressionList ENDIF\\
 
-stringExpression $\leftarrow$ integer | string | stringExpression DOT stringExpression\\
+stringExpression $\leftarrow$ boolean | string | stringExpression DOT stringExpression\\
 
 list $\leftarrow$ PAR\_OUVR stringListInterior PAR\_FERM | PAR\_OUVR integerListInterior PAR\_FERM\\
 
@@ -126,12 +126,22 @@ integerVar $\leftarrow$ INTEGER\\
 
 boolean $\leftarrow$ booleanVar | booleanOP | boolean BINOPERATOR boolean\\
 
-booleanOP $\leftarrow$ integer OPERATOR integer\\
+booleanOP $\leftarrow$ integer OPERATOR integer | integer\\
 
 booleanVar $\leftarrow$ BOOLEAN\\
 
 
 \section*{ Gestion du if et du for}
+
+Pour chaque expression définie dans notre programme lors de l'analyse syntaxique, nous créons une classe correspondant à cette expression. Chaque classe aura une fonction d'évaluation que l'on appellera durant la phase d'analyse syntaxique.\\
+
+%Programme -> dumboBlock -> expressionList -> expression DOT_COMMA
+
+Une boucle for est une expression: expression $\leftarrow$ FOR variableN IN list DO expressionList ENDFOR | FOR variableN IN variable DO expressionList ENDFOR\\ 
+Nous faisons la distinctions entre 2 types de variables. La première, variableN est un nom de variable dans lequel nous allons attribuer une valeur. La seconde, variable, est une variable déjà existante dans laquelle nous allons récupérer une valeur. Une boucle for est gérée par la classe ForExpression qui prend variableN en premier paramètre, list ou variable en second paramètre et une expressionList en dernier paramètre. A chaque itération, nous changeons la valeur à l'emplacement variableN dans un dictionnaire et l'envoyons à expressionList pour être évalué.\\
+
+Notre IF est une expression: expression $\leftarrow$ IF boolean DO expressionList ENDIF | IF boolean DO expressionList ELSE expressionList ENDIF\\
+Un IF est géré par la classe IfExpression qui prend en premier paramètre un boolean en second paramètre une expressionList et en dernier paramètre, soit None soit une autre expressionList.
 
 
 \section*{ Difficultés rencontrées }
